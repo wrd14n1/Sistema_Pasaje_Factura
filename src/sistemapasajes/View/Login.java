@@ -4,6 +4,11 @@
  */
 package sistemapasajes.View;
 
+import javax.swing.JOptionPane;
+import sistemapasajes.dao.UsuarioDAO;
+import sistemapasajes.dao.UsuarioDAOImpl;
+import sistemapasajes.modelo.UsuarioModel;
+
 /**
  *
  * @author edson
@@ -13,8 +18,18 @@ public class Login extends javax.swing.JInternalFrame {
     /**
      * Creates new form Login
      */
-    public Login() {
+    private Principal principal;
+     UsuarioDAO logindao = new UsuarioDAOImpl();
+        
+        UsuarioModel usuariolog = new UsuarioModel();
+
+    public Login(Principal principal) {
         initComponents();
+        this.principal = principal;
+    }
+
+    Login() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     /**
@@ -26,21 +41,90 @@ public class Login extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        txtusuario = new javax.swing.JTextField();
+        pswusuario = new javax.swing.JPasswordField();
+        btningresar = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+
+        setTitle("Acceso");
+
+        jLabel1.setText("Usuario:");
+
+        btningresar.setText("Ingresar");
+        btningresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btningresarActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Clave:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 394, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btningresar)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(pswusuario, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
+                            .addComponent(txtusuario))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 274, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtusuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(pswusuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(18, 18, 18)
+                .addComponent(btningresar)
+                .addContainerGap(10, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btningresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btningresarActionPerformed
+
+       
+        String usuario = txtusuario.getText();
+        String password = pswusuario.getText();
+        usuariolog = logindao.loginUsuario(usuario, password);
+        if (usuariolog != null) {
+            principal.menuconf.setEnabled(true);
+            principal.menupasaje.setEnabled(true);
+            principal.menusunat.setEnabled(true);
+
+            this.setVisible(false);
+              JOptionPane.showMessageDialog(null, "Acceso Correcto, Bienvenido "  + usuariolog.getDatosUsua(), "Hola", JOptionPane.INFORMATION_MESSAGE);
+
+        } else {
+              JOptionPane.showMessageDialog(null, "Error: NO EXISTE USUARIO O NO COINCIDE LOS DATOS, POR FAVOR INTENTE DE NUEVO " , "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
+
+
+    }//GEN-LAST:event_btningresarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btningresar;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPasswordField pswusuario;
+    private javax.swing.JTextField txtusuario;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,6 +5,8 @@
 package sistemapasajes.View;
 
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import sistemapasajes.Sunat;
 import sistemapasajes.dao.ConfiguracionDAO;
@@ -21,7 +23,40 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal() {
         initComponents();
-        
+         setExtendedState(JFrame.MAXIMIZED_BOTH);
+         Login vlog = new Login(this);
+        centrarInternalFrame(vlog);
+
+    }
+
+ 
+    private void centrarInternalFrame(JInternalFrame internalFrame) {
+        // Obtén el tamaño del desktop pane
+        int desktopAncho = jDesktopPane1.getWidth();
+        int desktopAlto = jDesktopPane1.getHeight();
+
+        // Obtén el tamaño del internal frame
+        int frameAncho = internalFrame.getWidth();
+        int frameAlto = internalFrame.getHeight();
+
+        // Calcula las coordenadas para centrar el internal frame
+        int x = (desktopAncho - frameAncho) / 2;
+        int y = (desktopAlto - frameAlto) / 2;
+
+        // Ajusta las coordenadas si la ventana principal está maximizada (considerando una pantalla 16:9)
+        if (getExtendedState() == javax.swing.JFrame.MAXIMIZED_BOTH) {
+            x = (desktopAncho - frameAncho) / 2;
+            y = (desktopAlto - frameAlto) / 2;
+        }
+
+        // Establece la posición del internal frame
+        internalFrame.setLocation(x, y);
+
+        // Agrega el internal frame al desktop pane
+        jDesktopPane1.add(internalFrame);
+
+        // Hacer visible el internal frame
+        internalFrame.setVisible(true);
     }
 
     /**
@@ -36,15 +71,15 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        menuconf = new javax.swing.JMenu();
         opconfig = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        menupasaje = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
+        menusunat = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
 
@@ -52,7 +87,6 @@ public class Principal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema de Pasajes");
-        setExtendedState(MAXIMIZED_BOTH);
         setLocationByPlatform(true);
         setName("Ventana Principal"); // NOI18N
 
@@ -67,7 +101,10 @@ public class Principal extends javax.swing.JFrame {
             .addGap(0, 500, Short.MAX_VALUE)
         );
 
-        jMenu1.setText("Configuración");
+        jMenuBar1.setEnabled(false);
+
+        menuconf.setText("Configuración");
+        menuconf.setEnabled(false);
 
         opconfig.setText("General");
         opconfig.addActionListener(new java.awt.event.ActionListener() {
@@ -75,7 +112,7 @@ public class Principal extends javax.swing.JFrame {
                 opconfigActionPerformed(evt);
             }
         });
-        jMenu1.add(opconfig);
+        menuconf.add(opconfig);
 
         jMenuItem2.setText("Vehiculos");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
@@ -83,7 +120,7 @@ public class Principal extends javax.swing.JFrame {
                 jMenuItem2ActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        menuconf.add(jMenuItem2);
 
         jMenuItem3.setText("Rutas");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
@@ -91,7 +128,7 @@ public class Principal extends javax.swing.JFrame {
                 jMenuItem3ActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem3);
+        menuconf.add(jMenuItem3);
 
         jMenuItem6.setText("API");
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
@@ -99,11 +136,12 @@ public class Principal extends javax.swing.JFrame {
                 jMenuItem6ActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem6);
+        menuconf.add(jMenuItem6);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(menuconf);
 
-        jMenu2.setText("Pasajes");
+        menupasaje.setText("Pasajes");
+        menupasaje.setEnabled(false);
 
         jMenuItem1.setText("Generar Pasajes");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -111,14 +149,15 @@ public class Principal extends javax.swing.JFrame {
                 jMenuItem1ActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem1);
+        menupasaje.add(jMenuItem1);
 
         jMenuItem5.setText("Pasajero");
-        jMenu2.add(jMenuItem5);
+        menupasaje.add(jMenuItem5);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(menupasaje);
 
-        jMenu3.setText("SUNAT");
+        menusunat.setText("SUNAT");
+        menusunat.setEnabled(false);
 
         jMenuItem7.setText("Ejecutar Servidor SFS");
         jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
@@ -126,7 +165,7 @@ public class Principal extends javax.swing.JFrame {
                 jMenuItem7ActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem7);
+        menusunat.add(jMenuItem7);
 
         jMenuItem8.setText("Abrir Facturador");
         jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
@@ -134,9 +173,9 @@ public class Principal extends javax.swing.JFrame {
                 jMenuItem8ActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem8);
+        menusunat.add(jMenuItem8);
 
-        jMenuBar1.add(jMenu3);
+        jMenuBar1.add(menusunat);
 
         setJMenuBar(jMenuBar1);
 
@@ -161,56 +200,53 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void opconfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opconfigActionPerformed
-            Configuracion vconf = new Configuracion();
-            vconf.setVisible(true);
-            jDesktopPane1.add(vconf);
+        Configuracion vconf = new Configuracion();
+             
+       
+         centrarInternalFrame(vconf);
     }//GEN-LAST:event_opconfigActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-       Vehiculo vvehi = new Vehiculo();
-       vvehi.setVisible(true);
-       jDesktopPane1.add(vvehi);
+        Vehiculo vvehi = new Vehiculo();
+        centrarInternalFrame(vvehi);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-       Ruta vruta = new Ruta();
-       vruta.setVisible(true);
-       jDesktopPane1.add(vruta);
+        Ruta vruta = new Ruta();
+        centrarInternalFrame(vruta);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-       Pasajes vpasaje = new Pasajes();
-       vpasaje.setVisible(true);
-       jDesktopPane1.add(vpasaje);
+        Pasajes vpasaje = new Pasajes();
+        centrarInternalFrame(vpasaje);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         Api vapi = new Api();
-        vapi.setVisible(true);
-        jDesktopPane1.add(vapi);
+        centrarInternalFrame(vapi);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-     
-         ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
-         String rutasunat = configdao.obtenerConfiguracionPorId(1).getRutaSunat();
-         String jarFile = rutasunat+"facturadorApp-1.7.jar";
+
+        ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
+        String rutasunat = configdao.obtenerConfiguracionPorId(1).getRutaSunat();
+        String jarFile = rutasunat + "facturadorApp-1.7.jar";
         //Sunat jarsunat = new Sunat();
-     
-     Sunat.ejecutarJarExterno(jarFile, "server","prod.yaml");
+
+        Sunat.ejecutarJarExterno(jarFile, "server", "prod.yaml");
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
-      Navegador vnav = new Navegador();
-     
+        Navegador vnav = new Navegador();
+
         try {
-             vnav.setVisible(true);
-             jDesktopPane1.add(vnav);
+            vnav.setVisible(true);
+            jDesktopPane1.add(vnav);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-     
-      
+
+
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     /**
@@ -250,9 +286,6 @@ public class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane jDesktopPane1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -262,6 +295,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
+    public javax.swing.JMenu menuconf;
+    public javax.swing.JMenu menupasaje;
+    public javax.swing.JMenu menusunat;
     private javax.swing.JMenuItem opconfig;
     // End of variables declaration//GEN-END:variables
 }
