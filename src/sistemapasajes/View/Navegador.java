@@ -7,6 +7,8 @@ package sistemapasajes.View;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import java.awt.BorderLayout;
+import java.beans.PropertyVetoException;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,13 +21,14 @@ public class Navegador extends javax.swing.JInternalFrame {
      * Creates new form Navegador
      */
    
-public Navegador() {
+public Navegador() throws PropertyVetoException {
      initComponents();
+     setMaximum(true);
     try {
         NativeInterface.open(); // Asegúrate de que esto se llame antes de cualquier componente relacionado con SWT
         JWebBrowser navegador = new JWebBrowser();
         this.WebPanel.setLayout(new BorderLayout());
-        navegador.navigate("http://www.google.com.pe");
+        navegador.navigate("http://localhost:9000/#");
         this.WebPanel.add(navegador);
     } catch (Exception ex) {
         JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -44,8 +47,6 @@ public Navegador() {
         WebPanel = new javax.swing.JPanel();
 
         setClosable(true);
-        setIconifiable(true);
-        setMaximizable(true);
         setTitle("SFS SUNAT");
 
         javax.swing.GroupLayout WebPanelLayout = new javax.swing.GroupLayout(WebPanel);

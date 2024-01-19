@@ -5,6 +5,9 @@
 package sistemapasajes.View;
 
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
+import java.beans.PropertyVetoException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -230,14 +233,20 @@ public class Principal extends javax.swing.JFrame {
 
         ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
         String rutasunat = configdao.obtenerConfiguracionPorId(1).getRutaSunat();
-        String jarFile = rutasunat + "facturadorApp-1.7.jar";
+        String jarFile = rutasunat+"/facturadorApp-1.7.jar";
         //Sunat jarsunat = new Sunat();
+        System.out.println(jarFile);
 
         Sunat.ejecutarJarExterno(jarFile, "server", "prod.yaml");
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
-        Navegador vnav = new Navegador();
+        Navegador vnav = null;
+        try {
+            vnav = new Navegador();
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         try {
             vnav.setVisible(true);
