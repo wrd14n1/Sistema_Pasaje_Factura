@@ -114,7 +114,7 @@ public class ArchivosPlanos {
                     //String sumatoria_tributos_item = Metodos.FormatoDecimalMostrar(String.valueOf((Double.parseDouble(PrecioTotal)*18)/82));
                     String codigo_tipo_tributo_igv = "1000";//hace referencia al IGV
                     String monto_igv_item = sumatoria_tributos_item;
-                    String base_imponible_igv_item = PrecioTotal;
+                    String base_imponible_igv_item = PrecioUnitario;
                     String nombre_tributo_item = "IGV";
                     String codigo_tributo_item = "VAT";
                     String afectacion_igv_item = "10";
@@ -138,8 +138,10 @@ public class ArchivosPlanos {
                     String nombre_icbper_item = "";
                     String codigo_icbper_item = "";
                     String monto_icbper_unidad = "";
-                    String precio_venta_unitario = String.valueOf(detalle.getValorunitarioDcomp());
-                    String valor_venta_item = base_imponible_igv_item;
+                    String precio_venta_unitario = PrecioTotal;
+                
+                    String valor_venta_item = String.valueOf(detalle.getValorunitarioDcomp());
+         
                     String valor_referencial_gratuito = "0.00";
                     //se esccribe la linea en el archivo
                     bufferedWriter.write(
@@ -227,7 +229,7 @@ public class ArchivosPlanos {
         ConvertirNumeroTexto convertir = new ConvertirNumeroTexto();
           //String ruta = rutaSUNAT + "\\sunat_archivos\\sfs\\DATA\\" +ruc+"-"+tipdoc+"-" + numserie + ".LEY";
            String ruta = rutaSUNAT + "/sunat_archivos/sfs/DATA/"+ruc+"-"+tipdoc+"-" + numserie + ".LEY";
-
+           String monto = String.valueOf(cabecera.getImptotalComp()) ;
         File apley = new File(ruta);
         BufferedWriter bufferedWriter;
         if (apley.exists()) {
@@ -236,7 +238,7 @@ public class ArchivosPlanos {
             try {
                 bufferedWriter = new BufferedWriter(new FileWriter(apley));
                 String codigo_leyenda = "1000";//venta interna
-                String descripcion_leyenda = convertir.Convertir(numserie, band())   ;
+                String descripcion_leyenda = convertir.Convertir(monto, band())   ;
                 //se esccribe la linea en el archivo
                 bufferedWriter.write(
                         codigo_leyenda + "|"

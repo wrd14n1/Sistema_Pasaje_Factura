@@ -98,7 +98,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
         txtcomprobante.setText(numserie);//txtcomprobante.setText(numserie);
         txttipocomprobante.setText(tiposerie);
         //jDateChooser1.setDate(hoy);
-        rutasunat= configdao.obtenerConfiguracionPorId(1).getRutaSunat();
+        rutasunat = configdao.obtenerConfiguracionPorId(1).getRutaSunat();
         rucempresa = configdao.obtenerConfiguracionPorId(1).getRucConf();
 
     }
@@ -664,7 +664,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
             pnlfactura.setEnabled(true);
             txtruc.setEnabled(true);
             btnbempresa.setEnabled(true);
-            tipdoccli="6";
+            tipdoccli = "6";
         } else {
             serie = seriedao.obtenerTipoSerie("BOLETA", "B001");
             numero = serie.getNumSerie() + 1;
@@ -675,7 +675,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
             pnlfactura.setEnabled(false);
             txtruc.setEnabled(false);
             btnbempresa.setEnabled(false);
-            tipdoccli="1";
+            tipdoccli = "1";
         }
         txtcomprobante.setText(numserie);
         txttipocomprobante.setText(tiposerie);
@@ -755,106 +755,112 @@ public class Pasajes extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnbempresaActionPerformed
 
     private void btncomprobanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncomprobanteActionPerformed
-        try {
-            //ARCHIVOS PLANOS
-             ArchivosPlanos archivos = new ArchivosPlanos();
-            
-            ComprobanteDAO comprobantedao = new ComprobanteDAOImpl();
-            DcomprobanteDAO dcomprobantedao = new DcomprobanteDAOImpl();
+        if (!"".equals(txtdni.getText()) && jDateChooser1.getDate()!=null) {
 
-            // Obtener datos del formulario
-            String tipo = txttipocomprobante.getText();
-            String serie = txtcomprobante.getText();
-            String cliente = chkbfactura.isSelected() ? txtrazon.getText() : txtpasajero.getText();
-            String docliente = chkbfactura.isSelected() ? txtruc.getText() : txtdni.getText();
-            String servicio = "SERVICIO DE TRANSPORTE DE PASAJEROS Origen: " + txtorigen.getText() + " Destino: "
-                    + txtdestino.getText() +"PASAJERO: " + txtpasajero.getText();
-
-            Date fecha = jDateChooser1.getDate();
-            String fechaformato = convertirFecha(fecha);
-            
-            Date hora = new Date();
-            SimpleDateFormat horaFormato = new SimpleDateFormat("HH:mm:ss");
-            
-            String horatexto = horaFormato.format(hora);
-            
-            String moneda = "PEN";
-            String medio = "Contado";
-            Double total = Double.valueOf(txtprecio.getText());
-            Double igv = total * 0.18;
-            Double totalgrav = total - igv;
-
-            String fechaformato1 = convertirFecha(fecha);
-            String fechaformato2 = convertirFecha(fecha);
-
-            String estado = "NO GENERADO";
-
-            // Crear comprobante
-            ComprobanteModel comprobante = new ComprobanteModel();
-            comprobante.setTipoComp(tipo);
-            comprobante.setSerieComp(serie);
-            comprobante.setDocclienteComp(docliente);
-            comprobante.setClienteComp(cliente);
-            comprobante.setFechaComp(fechaformato);
-            comprobante.setMonedaComp(moneda);
-            comprobante.setMediopagoComp(medio);
-            comprobante.setTotalventgravComp(totalgrav);
-            comprobante.setIgvComp(igv);
-            comprobante.setImptotalComp(total);
-            comprobante.setFechaxmlComp(fechaformato1);
-            comprobante.setFechaenvioComp(fechaformato2);
-            comprobante.setEstadoComp(estado);
-            comprobante.setHoraComp(horatexto);
-
-            comprobantedao.agregarComprobante(comprobante);
-
-            // Crear detalle del comprobante
-            DcomprobanteModel dcomprobante = new DcomprobanteModel();
-            dcomprobante.setNumserieDcomp(serie);
-            dcomprobante.setItemDcomp(1);
-            dcomprobante.setCantidadDcomp(1);
-            dcomprobante.setTipunidDcomp("ZZ");
-            dcomprobante.setProductoDcomp("P0001");
-            dcomprobante.setDescripcionDcomp(servicio);
-            dcomprobante.setValorunitarioDcomp(totalgrav);
-            dcomprobante.setPreciounitarioDcomp(total);
-            dcomprobantedao.agregarDcomprobante(dcomprobante);
-
-            // Actualizar número de serie
-            SerieDAO seriedao = new SerieDAOImpl();
-            SerieModel seriemodel = new SerieModel();
-            seriemodel.setCodSerie(codserie);
-            seriemodel.setNumSerie(numero);
-            seriedao.actualizarNumSerie(seriemodel);
-               System.out.println("este " + numserie);
-            //SE VUELVE A LLAMAR A LOS DATOS RECIEN INGRESADOS PARA GENERAR LOS ARCHIVOS PLANOS
-            ComprobanteModel obtenerComprobante = new ComprobanteModel();
-            DcomprobanteModel obtenerDcomprobante = new DcomprobanteModel();
             try {
-    obtenerComprobante = comprobantedao.obtenerComprobanteporNum(numserie);
-    String serieComp = obtenerComprobante.getSerieComp();
-    obtenerDcomprobante = dcomprobantedao.obtenerDcomprobanteporNum(numserie);
-             
-    // Resto de tu código
-} catch (Exception e) {
-    // Manejar la excepción (puedes imprimir información de depuración o mostrar un mensaje de error)
-    e.printStackTrace();
-}          
-            
-            tipocompsunat = seriedao.obtenerTipoSerie(tipo, codserie).getCodsunatSerie();
-            
-            //CREACIÓN ARCHIVOS PLANOS
-      
-            archivos.ArchivoPlanoCAB(rutasunat, rucempresa, tipocompsunat,  tipdoccli, numserie, obtenerComprobante);
-            archivos.ArchivoPlanoDET(rutasunat, rucempresa, tipocompsunat, numserie, obtenerDcomprobante);
-            archivos.ArchivoPlanoTRI(rutasunat, rucempresa, tipocompsunat, numserie, obtenerComprobante);
-            archivos.ArchivoPlanoLEY(rutasunat, rucempresa, tipocompsunat, numserie, obtenerComprobante);
-            archivos.ArchivoPlanoACA(rutasunat, rucempresa, tipocompsunat, numserie, obtenerComprobante);
-            archivos.ArchivoPlanoPAG(rutasunat, rucempresa, tipocompsunat, numserie, obtenerComprobante);
-             JOptionPane.showMessageDialog(null, "Archivos Planos Geneerados Correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
 
-        } catch (Exception ex) {
-            gestionarExcepcion(ex);
+                //ARCHIVOS PLANOS
+                ArchivosPlanos archivos = new ArchivosPlanos();
+
+                ComprobanteDAO comprobantedao = new ComprobanteDAOImpl();
+                DcomprobanteDAO dcomprobantedao = new DcomprobanteDAOImpl();
+
+                // Obtener datos del formulario
+                String tipo = txttipocomprobante.getText();
+                String serie = txtcomprobante.getText();
+                String cliente = chkbfactura.isSelected() ? txtrazon.getText() : txtpasajero.getText();
+                String docliente = chkbfactura.isSelected() ? txtruc.getText() : txtdni.getText();
+                String servicio = "SERVICIO DE TRANSPORTE DE PASAJEROS Origen: " + txtorigen.getText() + " Destino: "
+                        + txtdestino.getText() + "PASAJERO: " + txtpasajero.getText();
+
+                Date fecha = jDateChooser1.getDate();
+                String fechaformato = convertirFecha(fecha);
+
+                Date hora = new Date();
+                SimpleDateFormat horaFormato = new SimpleDateFormat("HH:mm:ss");
+
+                String horatexto = horaFormato.format(hora);
+
+                String moneda = "PEN";
+                String medio = "Contado";
+                Double total = Double.valueOf(txtprecio.getText());
+                Double igv = total * 0.18;
+                Double totalgrav = total - igv;
+
+                String fechaformato1 = convertirFecha(fecha);
+                String fechaformato2 = convertirFecha(fecha);
+
+                String estado = "NO GENERADO";
+
+                // Crear comprobante
+                ComprobanteModel comprobante = new ComprobanteModel();
+                comprobante.setTipoComp(tipo);
+                comprobante.setSerieComp(serie);
+                comprobante.setDocclienteComp(docliente);
+                comprobante.setClienteComp(cliente);
+                comprobante.setFechaComp(fechaformato);
+                comprobante.setMonedaComp(moneda);
+                comprobante.setMediopagoComp(medio);
+                comprobante.setTotalventgravComp(totalgrav);
+                comprobante.setIgvComp(igv);
+                comprobante.setImptotalComp(total);
+                comprobante.setFechaxmlComp(fechaformato1);
+                comprobante.setFechaenvioComp(fechaformato2);
+                comprobante.setEstadoComp(estado);
+                comprobante.setHoraComp(horatexto);
+
+                comprobantedao.agregarComprobante(comprobante);
+
+                // Crear detalle del comprobante
+                DcomprobanteModel dcomprobante = new DcomprobanteModel();
+                dcomprobante.setNumserieDcomp(serie);
+                dcomprobante.setItemDcomp(1);
+                dcomprobante.setCantidadDcomp(1);
+                dcomprobante.setTipunidDcomp("ZZ");
+                dcomprobante.setProductoDcomp("P0001");
+                dcomprobante.setDescripcionDcomp(servicio);
+                dcomprobante.setValorunitarioDcomp(totalgrav);
+                dcomprobante.setPreciounitarioDcomp(total);
+                dcomprobantedao.agregarDcomprobante(dcomprobante);
+
+                // Actualizar número de serie
+                SerieDAO seriedao = new SerieDAOImpl();
+                SerieModel seriemodel = new SerieModel();
+                seriemodel.setCodSerie(codserie);
+                seriemodel.setNumSerie(numero);
+                seriedao.actualizarNumSerie(seriemodel);
+                System.out.println("este " + numserie);
+                //SE VUELVE A LLAMAR A LOS DATOS RECIEN INGRESADOS PARA GENERAR LOS ARCHIVOS PLANOS
+                ComprobanteModel obtenerComprobante = new ComprobanteModel();
+                DcomprobanteModel obtenerDcomprobante = new DcomprobanteModel();
+                try {
+                    obtenerComprobante = comprobantedao.obtenerComprobanteporNum(numserie);
+                    String serieComp = obtenerComprobante.getSerieComp();
+                    obtenerDcomprobante = dcomprobantedao.obtenerDcomprobanteporNum(numserie);
+
+                    // Resto de tu código
+                } catch (Exception e) {
+                    // Manejar la excepción (puedes imprimir información de depuración o mostrar un mensaje de error)
+                    e.printStackTrace();
+                }
+
+                tipocompsunat = seriedao.obtenerTipoSerie(tipo, codserie).getCodsunatSerie();
+
+                //CREACIÓN ARCHIVOS PLANOS
+                archivos.ArchivoPlanoCAB(rutasunat, rucempresa, tipocompsunat, tipdoccli, numserie, obtenerComprobante);
+                archivos.ArchivoPlanoDET(rutasunat, rucempresa, tipocompsunat, numserie, obtenerDcomprobante);
+                archivos.ArchivoPlanoTRI(rutasunat, rucempresa, tipocompsunat, numserie, obtenerComprobante);
+                archivos.ArchivoPlanoLEY(rutasunat, rucempresa, tipocompsunat, numserie, obtenerComprobante);
+                archivos.ArchivoPlanoACA(rutasunat, rucempresa, tipocompsunat, numserie, obtenerComprobante);
+                archivos.ArchivoPlanoPAG(rutasunat, rucempresa, tipocompsunat, numserie, obtenerComprobante);
+                JOptionPane.showMessageDialog(null, "Archivos Planos Generados Correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (Exception ex) {
+                gestionarExcepcion(ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Existe Campos Vacíos", "Información", JOptionPane.INFORMATION_MESSAGE);
+
         }
 
     }//GEN-LAST:event_btncomprobanteActionPerformed

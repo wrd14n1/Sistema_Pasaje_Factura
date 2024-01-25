@@ -30,6 +30,7 @@ public class SistemaPasajes {
         } catch (Exception ex) {
             ex.printStackTrace();
              System.out.println("Error al establecer la conexión: " + ex.getMessage());
+             
         }
         
     }

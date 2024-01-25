@@ -26,13 +26,12 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal() {
         initComponents();
-         setExtendedState(JFrame.MAXIMIZED_BOTH);
-         Login vlog = new Login(this);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        Login vlog = new Login(this);
         centrarInternalFrame(vlog);
 
     }
 
- 
     private void centrarInternalFrame(JInternalFrame internalFrame) {
         // Obtén el tamaño del desktop pane
         int desktopAncho = jDesktopPane1.getWidth();
@@ -101,7 +100,7 @@ public class Principal extends javax.swing.JFrame {
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
+            .addGap(0, 504, Short.MAX_VALUE)
         );
 
         jMenuBar1.setEnabled(false);
@@ -154,7 +153,12 @@ public class Principal extends javax.swing.JFrame {
         });
         menupasaje.add(jMenuItem1);
 
-        jMenuItem5.setText("Pasajero");
+        jMenuItem5.setText("Lista de Pasajes");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
         menupasaje.add(jMenuItem5);
 
         jMenuBar1.add(menupasaje);
@@ -204,9 +208,8 @@ public class Principal extends javax.swing.JFrame {
 
     private void opconfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opconfigActionPerformed
         Configuracion vconf = new Configuracion();
-             
-       
-         centrarInternalFrame(vconf);
+
+        centrarInternalFrame(vconf);
     }//GEN-LAST:event_opconfigActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -233,7 +236,7 @@ public class Principal extends javax.swing.JFrame {
 
         ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
         String rutasunat = configdao.obtenerConfiguracionPorId(1).getRutaSunat();
-        String jarFile = rutasunat+"/facturadorApp-1.7.jar";
+        String jarFile = rutasunat + "/facturadorApp-1.7.jar";
         //Sunat jarsunat = new Sunat();
         System.out.println(jarFile);
 
@@ -241,22 +244,23 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
-        Navegador vnav = null;
+        Navegador vnav;
         try {
             vnav = new Navegador();
+             centrarInternalFrame(vnav);
         } catch (PropertyVetoException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        try {
-            vnav.setVisible(true);
-            jDesktopPane1.add(vnav);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+       
 
 
     }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        Lpasajes vlpje = new Lpasajes();
+
+        centrarInternalFrame(vlpje);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     /**
      * @param args the command line arguments

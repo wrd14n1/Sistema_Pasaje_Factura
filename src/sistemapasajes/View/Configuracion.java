@@ -7,12 +7,17 @@ package sistemapasajes.View;
 import java.io.File;
 import java.util.List;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import sistemapasajes.dao.ConfiguracionDAO;
 import sistemapasajes.dao.ConfiguracionDAOImpl;
+import sistemapasajes.dao.RutaArchivoDAO;
+import sistemapasajes.dao.RutaArchivoDAOImpl;
 import sistemapasajes.modelo.ConfiguracionModel;
+import sistemapasajes.modelo.RutaArchivoModel;
 
 /**
  *
@@ -20,27 +25,68 @@ import sistemapasajes.modelo.ConfiguracionModel;
  */
 public class Configuracion extends javax.swing.JInternalFrame {
 
-        String ruc;
-        String razon;
-        String nomcom;
-        String direccion;
-        String sunat;
-        String archivo;
-        String rsunat;
-        String rarchivo;
-        String rlogo;
-        String logo;
-        String txt1;
-        String txt2;
-        String txt3;
+    String ruc;
+    String razon;
+    String nomcom;
+    String direccion;
+    String sunat;
+    String archivo;
+    String rsunat;
+    String rarchivo;
+    String rlogo;
+    String logo;
+    String txt1;
+    String txt2;
+    String txt3;
+    int filaSeleccionada;
+
     /**
      * Creates new form Configuracion
      */
     public Configuracion() {
         initComponents();
         cargarDatosConfiguracion();
+
+        // Agregar el manejador de eventos de selección de la tabla
+        tabconfig.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                // Obtener el índice de la fila seleccionada
+                filaSeleccionada = tabconfig.getSelectedRow();
+                btnguardar.setEnabled(false);
+                btnactualizar.setEnabled(true);
+                // Verificar si hay una fila seleccionada
+                if (filaSeleccionada != -1) {
+                    // Obtener los valores de la fila seleccionada
+                    String idConf = tabconfig.getValueAt(filaSeleccionada, 0).toString();
+                    String rucConf = tabconfig.getValueAt(filaSeleccionada, 1).toString();
+                    String razonConf = tabconfig.getValueAt(filaSeleccionada, 2).toString();
+                    String nomcomConf = tabconfig.getValueAt(filaSeleccionada, 3).toString();
+                    String direcConf = tabconfig.getValueAt(filaSeleccionada, 4).toString();
+                    String rutaSunat = tabconfig.getValueAt(filaSeleccionada, 5).toString();
+                    String rutaArchivo = tabconfig.getValueAt(filaSeleccionada, 6).toString();
+                    String rutalogo = tabconfig.getValueAt(filaSeleccionada, 7).toString();
+                    String text1 = tabconfig.getValueAt(filaSeleccionada, 8).toString();
+                    String text2 = tabconfig.getValueAt(filaSeleccionada, 9).toString();
+                    String text3 = tabconfig.getValueAt(filaSeleccionada, 10).toString();
+
+                    // Cargar los valores en los campos de texto
+                    txtruc.setText(rucConf);
+                    txtrazon.setText(razonConf);
+                    txtnom.setText(nomcomConf);
+                    txtdirec.setText(direcConf);
+                    txtsunat.setText(rutaSunat);
+                    txtarchivo.setText(rutaArchivo);
+                    txtlogo.setText(rutalogo);
+                    txtAr1.setText(text1);
+                    txtAr2.setText(text2);
+                    txtAr3.setText(text3);
+
+                    // Puedes continuar con el resto de los campos según sea necesario
+                }
+            }
+        });
     }
-    
+
     private void cargarDatosConfiguracion() {
         DefaultTableModel modeloTabla = new DefaultTableModel();
         modeloTabla.addColumn("ID");
@@ -50,6 +96,10 @@ public class Configuracion extends javax.swing.JInternalFrame {
         modeloTabla.addColumn("Dirección");
         modeloTabla.addColumn("Ruta Sunat");
         modeloTabla.addColumn("Ruta de Archivos");
+        modeloTabla.addColumn("Ruta de Logo");
+        modeloTabla.addColumn("Texto 1");
+        modeloTabla.addColumn("Texto 2");
+        modeloTabla.addColumn("Texto 3");
 
         ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
         List<ConfiguracionModel> configuraciones = configdao.obtenerTodasConfiguraciones();
@@ -62,21 +112,31 @@ public class Configuracion extends javax.swing.JInternalFrame {
                 configuracion.getNomcomConf(),
                 configuracion.getDirecConf(),
                 configuracion.getRutaSunat(),
-                configuracion.getRutaArchivo()
+                configuracion.getRutaArchivo(),
+                configuracion.getLogoConf(),
+                configuracion.getTxt1Conf(),
+                configuracion.getTxt2Conf(),
+                configuracion.getTxt3Conf()
             };
             modeloTabla.addRow(fila);
         }
 
         tabconfig.setModel(modeloTabla);
     }
-    
+
     private void limpiarCamposTexto(JTextField... camposTexto) {
         for (JTextField campo : camposTexto) {
             campo.setText("");
         }
     }
 
-    
+    // Sobrecargar el método para admitir JTextArea
+    private void limpiarCamposTexto(JTextArea... camposTexto) {
+        for (JTextArea campo : camposTexto) {
+            campo.setText("");
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -110,6 +170,7 @@ public class Configuracion extends javax.swing.JInternalFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
+        btnactualizar = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -163,6 +224,7 @@ public class Configuracion extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tabconfig.setAutoscrolls(false);
         jScrollPane1.setViewportView(tabconfig);
 
         jLabel7.setText("Ruta Logo:");
@@ -194,6 +256,14 @@ public class Configuracion extends javax.swing.JInternalFrame {
 
         jLabel10.setText("Texto 3:");
 
+        btnactualizar.setText("Actualizar");
+        btnactualizar.setEnabled(false);
+        btnactualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnactualizarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -216,7 +286,9 @@ public class Configuracion extends javax.swing.JInternalFrame {
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnguardar))
+                        .addComponent(btnguardar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnactualizar))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
@@ -294,7 +366,9 @@ public class Configuracion extends javax.swing.JInternalFrame {
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnguardar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnguardar)
+                    .addComponent(btnactualizar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -307,20 +381,19 @@ public class Configuracion extends javax.swing.JInternalFrame {
 
         ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
         ConfiguracionModel config = new ConfiguracionModel();
-         try {
+        try {
             ruc = txtruc.getText();
             razon = txtrazon.getText();
             nomcom = txtnom.getText();
             direccion = txtdirec.getText();
             rsunat = sunat;
-            rarchivo=archivo;
-            rlogo=logo;
-            txt1=txtAr1.getText();
-            txt2=txtAr2.getText();
-            txt3=txtAr3.getText();
+            rarchivo = archivo;
+            rlogo = logo;
+            txt1 = txtAr1.getText();
+            txt2 = txtAr2.getText();
+            txt3 = txtAr3.getText();
 
-                    
-            /* Cargar DAO*/        
+            /* Cargar DAO*/
             config.setRucConf(ruc);
             config.setRazonConf(razon);
             config.setNomcomConf(nomcom);
@@ -333,16 +406,17 @@ public class Configuracion extends javax.swing.JInternalFrame {
             config.setTxt3Conf(txt3);
             configdao.agregarConfiguracion(config);
             //System.out.println("Configuración Agregada Correctacmente");
-             cargarDatosConfiguracion();
-             limpiarCamposTexto(txtruc,txtrazon,txtnom,txtdirec,txtsunat,txtarchivo,txtlogo);
+            cargarDatosConfiguracion();
+            limpiarCamposTexto(txtruc, txtrazon, txtnom, txtdirec, txtsunat, txtarchivo, txtlogo);
+            limpiarCamposTexto(txtAr1,txtAr2,txtAr3);
         } catch (Exception e) {
-             System.out.println("Error: " + e);
+            System.out.println("Error: " + e);
         }
     }//GEN-LAST:event_btnguardarActionPerformed
 
     private void btnsunatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsunatActionPerformed
-                   /*File chooser*/
-      // Seleccionar la carpeta utilizando JFileChooser
+        /*File chooser*/
+        // Seleccionar la carpeta utilizando JFileChooser
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
@@ -360,8 +434,8 @@ public class Configuracion extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnsunatActionPerformed
 
     private void btnarchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnarchivoActionPerformed
-                          /*File chooser*/
-      // Seleccionar la carpeta utilizando JFileChooser
+        /*File chooser*/
+        // Seleccionar la carpeta utilizando JFileChooser
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
@@ -379,26 +453,92 @@ public class Configuracion extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnarchivoActionPerformed
 
     private void btnlogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnlogoActionPerformed
-                       // Seleccionar el archivo de imagen utilizando JFileChooser
-                JFileChooser chooser = new JFileChooser();
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de Imagen", "jpg", "jpeg", "png", "gif");
-                chooser.setFileFilter(filter);
-                int seleccion = chooser.showOpenDialog(this);
+        // Seleccionar el archivo de imagen utilizando JFileChooser
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de Imagen", "jpg", "jpeg", "png", "gif");
+        chooser.setFileFilter(filter);
+        int seleccion = chooser.showOpenDialog(this);
 
-                if (seleccion == JFileChooser.APPROVE_OPTION) {
-                    File archivoSeleccionado = chooser.getSelectedFile();
-                   logo = archivoSeleccionado.getAbsolutePath();
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            File archivoSeleccionado = chooser.getSelectedFile();
+            logo = archivoSeleccionado.getAbsolutePath();
 
-                    // Mostrar la ruta en el campo de texto txtarchivo
-                    txtlogo.setText(logo);
-                } else {
-                    // El usuario canceló la selección, puedes manejarlo según tus necesidades
-                    // Por ejemplo, mostrar un mensaje o realizar alguna acción específica
-                }
+            // Mostrar la ruta en el campo de texto txtarchivo
+            txtlogo.setText(logo);
+        } else {
+            // El usuario canceló la selección, puedes manejarlo según tus necesidades
+            // Por ejemplo, mostrar un mensaje o realizar alguna acción específica
+        }
     }//GEN-LAST:event_btnlogoActionPerformed
+
+    private void btnactualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnactualizarActionPerformed
+        // Verificar si hay una fila seleccionada
+        if (filaSeleccionada != -1) {
+            ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
+            ConfiguracionModel config = new ConfiguracionModel();
+            
+            RutaArchivoDAO rutaarchivodao = new RutaArchivoDAOImpl();
+            RutaArchivoModel rutaarchivo = new RutaArchivoModel();
+            
+            try {
+                // Obtener los valores de los campos de entrada
+                ruc = txtruc.getText();
+                razon = txtrazon.getText();
+                nomcom = txtnom.getText();
+                direccion = txtdirec.getText();
+                rsunat = txtsunat.getText(); // Utilizar el texto directamente
+                rarchivo = txtarchivo.getText(); // Utilizar el texto directamente
+                rlogo = txtlogo.getText(); // Utilizar el texto directamente
+                txt1 = txtAr1.getText();
+                txt2 = txtAr2.getText();
+                txt3 = txtAr3.getText();
+
+                // Cargar el modelo ConfiguracionModel con los nuevos valores
+                config.setIdConf(Integer.parseInt(tabconfig.getValueAt(filaSeleccionada, 0).toString()));
+                config.setRucConf(ruc);
+                config.setRazonConf(razon);
+                config.setNomcomConf(nomcom);
+                config.setDirecConf(direccion);
+                config.setRutaSunat(rsunat);
+                config.setRutaArchivo(rarchivo);
+                config.setLogoConf(rlogo);
+                config.setTxt1Conf(txt1);
+                config.setTxt2Conf(txt2);
+                config.setTxt3Conf(txt3);
+
+                // Actualizar la configuración en la base de datos
+                configdao.actualizarConfiguracion(config);
+                
+                //actualizar rutas 
+                rutaarchivo.setDescRutaArchivo(rarchivo+"\\sunat_archivos\\sfs\\FIRMA\\");
+                rutaarchivo.setEmpRutaArchivo(ruc);
+                rutaarchivo.setTituloRutaArchivo("hash");
+                rutaarchivodao.actualizarRuta(rutaarchivo);
+                
+                rutaarchivo.setDescRutaArchivo(rarchivo+"\\sunat_archivos\\sfs\\ORIDAT\\");
+                rutaarchivo.setEmpRutaArchivo(ruc);
+                rutaarchivo.setTituloRutaArchivo("qr");
+                  rutaarchivodao.actualizarRuta(rutaarchivo);
+                cargarDatosConfiguracion();
+                
+                limpiarCamposTexto(txtruc, txtrazon, txtnom, txtdirec, txtsunat, txtarchivo, txtlogo);
+                limpiarCamposTexto(txtAr1,txtAr2,txtAr3);
+
+                // Restablecer la fila seleccionada
+                filaSeleccionada = -1;
+
+            } catch (Exception e) {
+                System.out.println("Error: " + e);
+            }
+        } else {
+            // Indicar al usuario que no hay fila seleccionada para actualizar
+            JOptionPane.showMessageDialog(this, "Selecciona una fila para actualizar", "Aviso", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnactualizarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnactualizar;
     private javax.swing.JButton btnarchivo;
     private javax.swing.JButton btnguardar;
     private javax.swing.JButton btnlogo;

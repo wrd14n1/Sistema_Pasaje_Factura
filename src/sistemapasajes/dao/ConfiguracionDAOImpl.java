@@ -157,7 +157,7 @@ public class ConfiguracionDAOImpl implements ConfiguracionDAO {
 
     @Override
     public void actualizarConfiguracion(ConfiguracionModel configuracion) {
-        String query = "UPDATE configuracion SET ruc_conf = ?, razon_conf = ?, nomcom_conf = ?, direc_conf = ?, rsunat_conf=? , rarch = ?, logo_conf =?, text1_conf=?, text2_conf=?, text3_conf=? WHERE id_conf = ?";
+        String query = "UPDATE configuracion SET ruc_conf = ?, razon_conf = ?, nomcom_conf = ?, direc_conf = ?, rsunat_conf=? , rarch_conf = ?, logo_conf =?, text1_conf=?, text2_conf=?, text3_conf=? WHERE id_conf = ?";
 
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setString(1, configuracion.getRucConf());
@@ -174,7 +174,7 @@ public class ConfiguracionDAOImpl implements ConfiguracionDAO {
 
             stmt.executeUpdate();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al actualizar registro: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error DAO - Actualizar Configuración: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         } finally {
             Conexion desconectar = new Conexion();
             try {

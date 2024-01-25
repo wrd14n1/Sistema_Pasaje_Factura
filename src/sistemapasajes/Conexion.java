@@ -7,23 +7,26 @@ package sistemapasajes;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  * Clase para manejar la conexión a la base de datos MySQL.
- * 
+ *
  * @author edson
  */
 public class Conexion {
+
     // Configuración de la conexión
     private static final String URL = "jdbc:mysql://localhost:3306/bd_pasaje";
     private static final String USUARIO = "root";
     private static final String CONTRASENA = "020320";
-    
+    //private static final String CONTRASENA = "";
+
     private Connection conexion;
 
     /**
      * Método para establecer la conexión con la base de datos.
-     * 
+     *
      * @return La conexión establecida.
      * @throws SQLException Si hay un error al establecer la conexión.
      */
@@ -31,25 +34,28 @@ public class Conexion {
         try {
             // Cargar el controlador de MySQL
             Class.forName("com.mysql.cj.jdbc.Driver");
-            
+
             // Establecer la conexión
             conexion = DriverManager.getConnection(URL, USUARIO, CONTRASENA);
-            
+
             // Comprobar si la conexión fue exitosa
             if (conexion != null) {
                 System.out.println("Conexión exitosa a la base de datos");
             }
-            
+
             return conexion;
         } catch (ClassNotFoundException | SQLException ex) {
             // Manejar cualquier excepción que pueda ocurrir durante la conexión
+            JOptionPane.showMessageDialog(null, "Error de Conexión: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+
             throw new SQLException("Error al conectar a la base de datos", ex);
+
         }
     }
 
     /**
      * Método para cerrar la conexión con la base de datos.
-     * 
+     *
      * @throws SQLException Si hay un error al cerrar la conexión.
      */
     public void desconectar() throws SQLException {
