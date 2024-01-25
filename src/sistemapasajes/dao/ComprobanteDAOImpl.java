@@ -185,12 +185,37 @@ public class ComprobanteDAOImpl implements ComprobanteDAO {
         Double totalventgravComp = rs.getDouble("totalventgrav_comp");
         Double igvComp = rs.getDouble("igv_comp");
         Double imptotalComp = rs.getDouble("imptotal_comp");
+        String hashComp = rs.getString("hash_comp");
         String fechaxmlComp = rs.getString("fechaxml_comp");
         String fechaenvioComp = rs.getString("fechaenvio_comp");
         String estadoComp = rs.getString("estado_comp");
 
         return new ComprobanteModel(idComp, tipoComp, serieComp, docclienteComp,clienteComp, fechaComp, horaComp,monedaComp,
-                mediopagoComp, totalventgravComp, igvComp, imptotalComp, fechaxmlComp, fechaenvioComp, estadoComp);
+                mediopagoComp, totalventgravComp, igvComp, imptotalComp, hashComp, fechaxmlComp, fechaenvioComp, estadoComp);
     }
+
+    @Override
+    public void actualizarComprobanteHash(ComprobanteModel comprobante) {
+                String query = "UPDATE comprobante SET hash_comp = ? WHERE serie_comp = ?";
+
+        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+            stmt.setString(1, comprobante.getHashComp());
+            stmt.setString(2, comprobante.getSerieComp());
+
+
+
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error DAO - Actualizar Hash Comprobante: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            Conexion desconectar = new Conexion();
+            try {
+                desconectar.desconectar();
+                System.out.println("Desconexión exitosa.");
+            } catch (SQLException ex) {
+                System.out.println("Error al desconectar" + ex.getMessage());
+            }
+        }
+ }
 
 }

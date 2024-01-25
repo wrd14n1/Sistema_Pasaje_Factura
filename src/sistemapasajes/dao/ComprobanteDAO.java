@@ -19,5 +19,5 @@ public interface ComprobanteDAO {
     void agregarComprobante (ComprobanteModel comprobante);
     void actualizarComprobante  (ComprobanteModel comprobante);
     void eliminarComprobante (int idComp);    
-    
+    void actualizarComprobanteHash(ComprobanteModel comprobante);
 }

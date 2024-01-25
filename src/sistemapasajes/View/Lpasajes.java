@@ -4,12 +4,19 @@
  */
 package sistemapasajes.View;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import sistemapasajes.GenerarQR;
 import sistemapasajes.Sunat;
 import sistemapasajes.dao.ComprobanteDAO;
 import sistemapasajes.dao.ComprobanteDAOImpl;
@@ -126,9 +133,14 @@ String rutaqr;
     private void btnpdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnpdfActionPerformed
        RutaArchivoDAO rutaarchivodao = new RutaArchivoDAOImpl();
       
-        
+        String rhash ;
+                
          ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
          ConfiguracionModel configuracion = configdao.obtenerConfiguracionPorId(1);      
+         
+         ComprobanteDAO comprobantedao = new ComprobanteDAOImpl();
+         ComprobanteModel comprobante = new ComprobanteModel();
+         
 // Obtener el índice de la fila seleccionada
     int indiceFilaSeleccionada = tabpasajes.getSelectedRow();
 
@@ -143,8 +155,9 @@ String rutaqr;
         String monto = tabpasajes.getValueAt(indiceFilaSeleccionada, 5).toString();
         String tipo;
           RutaArchivoModel rutaarchivo = rutaarchivodao.obtenerRutaporEmpresa(configuracion.getRucConf(),"hash");
- 
-        
+          RutaArchivoModel rutaqr = rutaarchivodao.obtenerRutaporEmpresa(configuracion.getRucConf(), "qr");
+          String rqr = rutaqr.getDescRutaArchivo()+configuracion.getRucConf()+"-";
+        String datos;
         if (tipoComprobante.equals("BOLETA")) {
             tipo="03";
         } else{
@@ -153,8 +166,22 @@ String rutaqr;
         String ruta = rutaarchivo.getDescRutaArchivo()+configuracion.getRucConf()+"-" + tipo + "-" + numComprobante + ".xml";
         Sunat sunat = new Sunat();
         try {
+            
+          
             System.out.println(ruta);
-            sunat.getHash(ruta);
+           
+            rhash= sunat.getHash(ruta);
+             System.out.println(rhash);
+             comprobante.setHashComp(rhash);
+             comprobante.setSerieComp(numComprobante);
+             comprobantedao.actualizarComprobanteHash(comprobante);
+             
+               datos =configuracion.getRucConf()+"|"+
+                    tipo+"|"+numComprobante+"|"+ 
+                    monto+"|"+ numDocumento+"|"+rhash;
+            GenerarQR genqr = new GenerarQR();
+            genqr.GenerarQR(datos, numComprobante, rqr);
+             
         } catch (IOException ex) {
             System.out.println("error: " + ex);
             JOptionPane.showMessageDialog(this, "Error: " +ex, "Error", JOptionPane.ERROR_MESSAGE);
@@ -171,17 +198,38 @@ String rutaqr;
     }//GEN-LAST:event_btnpdfActionPerformed
 // Ejemplo de un método para crear un PDF utilizando los datos de la fila seleccionada
 private void crearPDF(String numComprobante, String tipoComprobante, String razonSocial, String numDocumento, String fecha, String monto) {
-    // Implementa tu lógica de creación de PDF aquí
-    // Puedes usar una biblioteca como iText o Apache PDFBox para crear PDFs
-    // Ejemplo: Crear un PDF con los datos seleccionados
-    // TODO: Implementa tu lógica de creación de PDF
-    System.out.println("Creando PDF con los datos seleccionados...");
-    System.out.println("N° Comprobante: " + numComprobante);
-    System.out.println("Tipo Comprobante: " + tipoComprobante);
-    System.out.println("Razón Social: " + razonSocial);
-    System.out.println("N° Documento: " + numDocumento);
-    System.out.println("Fecha: " + fecha);
-    System.out.println("Monto: " + monto);
+    Document document = new Document();
+
+    try {
+        // Especifica la ruta y el nombre del archivo PDF
+        String rutaPDF = "ruta/del/archivo/" + numComprobante + ".pdf";
+        PdfWriter.getInstance(document, new FileOutputStream(rutaPDF));
+        document.open();
+
+        // Agrega contenido al PDF
+        document.add(new Paragraph("N° Comprobante: " + numComprobante));
+        document.add(new Paragraph("Tipo Comprobante: " + tipoComprobante));
+        document.add(new Paragraph("Razón Social: " + razonSocial));
+        document.add(new Paragraph("N° Documento: " + numDocumento));
+        document.add(new Paragraph("Fecha: " + fecha));
+        document.add(new Paragraph("Monto: " + monto));
+
+        // Agrega una imagen al PDF (ajusta la ruta de la imagen según tu caso)
+        Image imagen = Image.getInstance("ruta/de/tu/imagen/logo.png");
+        document.add(imagen);
+
+        // Puedes utilizar PdfPTable para organizar la información en una tabla
+        PdfPTable tabla = new PdfPTable(2);
+        tabla.addCell("Campo 1");
+        tabla.addCell("Campo 2");
+        document.add(tabla);
+
+        document.close();
+        System.out.println("PDF creado exitosamente: " + rutaPDF);
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al crear el PDF: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
 }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

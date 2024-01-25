@@ -510,12 +510,12 @@ public class Configuracion extends javax.swing.JInternalFrame {
                 configdao.actualizarConfiguracion(config);
                 
                 //actualizar rutas 
-                rutaarchivo.setDescRutaArchivo(rarchivo+"\\sunat_archivos\\sfs\\FIRMA\\");
+                rutaarchivo.setDescRutaArchivo(rsunat+"\\sunat_archivos\\sfs\\FIRMA\\");
                 rutaarchivo.setEmpRutaArchivo(ruc);
                 rutaarchivo.setTituloRutaArchivo("hash");
                 rutaarchivodao.actualizarRuta(rutaarchivo);
                 
-                rutaarchivo.setDescRutaArchivo(rarchivo+"\\sunat_archivos\\sfs\\ORIDAT\\");
+                rutaarchivo.setDescRutaArchivo(rsunat+"\\sunat_archivos\\sfs\\ORIDAT\\");
                 rutaarchivo.setEmpRutaArchivo(ruc);
                 rutaarchivo.setTituloRutaArchivo("qr");
                   rutaarchivodao.actualizarRuta(rutaarchivo);
