@@ -17,15 +17,22 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import sistemapasajes.GenerarQR;
+import sistemapasajes.PDF;
 import sistemapasajes.Sunat;
 import sistemapasajes.dao.ComprobanteDAO;
 import sistemapasajes.dao.ComprobanteDAOImpl;
 import sistemapasajes.dao.ConfiguracionDAO;
 import sistemapasajes.dao.ConfiguracionDAOImpl;
+import sistemapasajes.dao.DcomprobanteDAO;
+import sistemapasajes.dao.DcomprobanteDAOImpl;
+import sistemapasajes.dao.EmpresaDAO;
+import sistemapasajes.dao.EmpresaDAOImpl;
 import sistemapasajes.dao.RutaArchivoDAO;
 import sistemapasajes.dao.RutaArchivoDAOImpl;
 import sistemapasajes.modelo.ComprobanteModel;
 import sistemapasajes.modelo.ConfiguracionModel;
+import sistemapasajes.modelo.DcomprobanteModel;
+import sistemapasajes.modelo.EmpresaModel;
 import sistemapasajes.modelo.RutaArchivoModel;
 
 
@@ -140,6 +147,7 @@ String rutaqr;
          
          ComprobanteDAO comprobantedao = new ComprobanteDAOImpl();
          ComprobanteModel comprobante = new ComprobanteModel();
+        
          
 // Obtener el índice de la fila seleccionada
     int indiceFilaSeleccionada = tabpasajes.getSelectedRow();
@@ -190,47 +198,22 @@ String rutaqr;
 
         // Ahora puedes utilizar estos datos para crear un PDF o realizar cualquier otra acción
         // Por ejemplo, puedes pasar estos datos a un método de creación de PDF
-        crearPDF(numComprobante, tipoComprobante, razonSocial, numDocumento, fecha, monto);
+         ComprobanteModel datoscomprobante = comprobantedao.obtenerComprobanteporNum(numComprobante);
+         DcomprobanteDAO dcomprobantedao = new DcomprobanteDAOImpl();
+        DcomprobanteModel datosdetcomprobante = dcomprobantedao.obtenerDcomprobanteporNum(numComprobante);
+        
+        EmpresaDAO empresadao = new EmpresaDAOImpl();
+        EmpresaModel empresa = empresadao.obtenerEmpresaporRuc(numDocumento);
+        
+        PDF pdf = new PDF();
+                
+        pdf.crearPDF(configuracion,datoscomprobante,datosdetcomprobante,empresa);
     } else {
         // No se ha seleccionado ninguna fila, puedes mostrar un mensaje o realizar cualquier otra acción
         System.out.println("Ninguna fila seleccionada");
     }
     }//GEN-LAST:event_btnpdfActionPerformed
-// Ejemplo de un método para crear un PDF utilizando los datos de la fila seleccionada
-private void crearPDF(String numComprobante, String tipoComprobante, String razonSocial, String numDocumento, String fecha, String monto) {
-    Document document = new Document();
 
-    try {
-        // Especifica la ruta y el nombre del archivo PDF
-        String rutaPDF = "ruta/del/archivo/" + numComprobante + ".pdf";
-        PdfWriter.getInstance(document, new FileOutputStream(rutaPDF));
-        document.open();
-
-        // Agrega contenido al PDF
-        document.add(new Paragraph("N° Comprobante: " + numComprobante));
-        document.add(new Paragraph("Tipo Comprobante: " + tipoComprobante));
-        document.add(new Paragraph("Razón Social: " + razonSocial));
-        document.add(new Paragraph("N° Documento: " + numDocumento));
-        document.add(new Paragraph("Fecha: " + fecha));
-        document.add(new Paragraph("Monto: " + monto));
-
-        // Agrega una imagen al PDF (ajusta la ruta de la imagen según tu caso)
-        Image imagen = Image.getInstance("ruta/de/tu/imagen/logo.png");
-        document.add(imagen);
-
-        // Puedes utilizar PdfPTable para organizar la información en una tabla
-        PdfPTable tabla = new PdfPTable(2);
-        tabla.addCell("Campo 1");
-        tabla.addCell("Campo 2");
-        document.add(tabla);
-
-        document.close();
-        System.out.println("PDF creado exitosamente: " + rutaPDF);
-    } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error al crear el PDF: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    }
-}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnpdf;
