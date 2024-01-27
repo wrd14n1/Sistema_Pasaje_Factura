@@ -7,13 +7,42 @@
         <Property name="text" type="java.lang.String" value="jMenuItem4"/>
       </Properties>
     </Component>
+    <Component class="javax.swing.JMenuItem" name="jMenuItem9">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jMenuItem9"/>
+      </Properties>
+    </Component>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <Properties>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <SubComponents>
+        <Menu class="javax.swing.JMenu" name="jMenu1">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/recursos/ingresar_menu.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Ingresar"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="menuitemingresar">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/recursos/ingresar_menu.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Ingresar"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuitemingresarActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
         <Menu class="javax.swing.JMenu" name="menuconf">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/recursos/conf_menu.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Configuraci&#xf3;n"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
@@ -23,6 +52,9 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="opconfig">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/recursos/conf_gen_menu.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="General"/>
               </Properties>
               <Events>
@@ -31,6 +63,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/recursos/carros.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Vehiculos"/>
               </Properties>
               <Events>
@@ -39,6 +74,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/recursos/ruta_menu.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Rutas"/>
               </Properties>
               <Events>
@@ -47,6 +85,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem6">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/recursos/api_menu.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="API"/>
               </Properties>
               <Events>
@@ -57,6 +98,9 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="menupasaje">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/recursos/pasaje_menu.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Pasajes"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
@@ -66,6 +110,9 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/recursos/pasaje_menu.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Generar Pasajes"/>
               </Properties>
               <Events>
@@ -74,6 +121,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem5">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/recursos/pasaje-aereo.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Lista de Pasajes"/>
               </Properties>
               <Events>
@@ -84,7 +134,10 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="menusunat">
           <Properties>
-            <Property name="text" type="java.lang.String" value="SUNAT"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/recursos/sunat_menu.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Facturador"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <AuxValues>
@@ -93,6 +146,9 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem7">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/recursos/archivo-ejecutable.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Ejecutar Servidor SFS"/>
               </Properties>
               <Events>
@@ -101,6 +157,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem8">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/recursos/navegador.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Abrir Facturador"/>
               </Properties>
               <Events>
@@ -166,7 +225,7 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="504" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="498" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>

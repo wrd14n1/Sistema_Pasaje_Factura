@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package sistemapasajes;
+
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
@@ -22,7 +23,8 @@ import sistemapasajes.modelo.DcomprobanteModel;
 import sistemapasajes.modelo.EmpresaModel;
 
 public class PDF {
-    public void crearPDF(ConfiguracionModel datosconfig, ComprobanteModel datoscomprobante, DcomprobanteModel datosdetcomprobante, EmpresaModel datosemp) {
+
+    public void crearPDF(ConfiguracionModel datosconfig, ComprobanteModel datoscomprobante, DcomprobanteModel datosdetcomprobante, EmpresaModel datosemp, String rutaqr) {
         ConvertirNumeroTexto convertir = new ConvertirNumeroTexto();
         float anchoMilimetros = 80; // Ancho en milímetros
         float altoMilimetros = 297;  // Alto en milímetros
@@ -68,6 +70,7 @@ public class PDF {
             Font fontSubtitulo = new Font(Font.FontFamily.HELVETICA, 8, Font.BOLDITALIC);
             Font fontNegrita = new Font(Font.FontFamily.HELVETICA, 7, Font.BOLD);
             Font fontNormal = new Font(Font.FontFamily.HELVETICA, 7);
+                Font fontTerminos = new Font(Font.FontFamily.HELVETICA, 6,Font.BOLD);
 
             // Agrega contenido al PDF
             Paragraph titulo = new Paragraph(datosconfig.getRazonConf(), fontTitulo);
@@ -86,13 +89,10 @@ public class PDF {
             texto2.setAlignment(Element.ALIGN_CENTER);
             document.add(texto2);
 
-            Paragraph texto3 = new Paragraph(datosconfig.getTxt3Conf(), fontNormal);
-            texto3.setAlignment(Element.ALIGN_CENTER);
-            document.add(texto3);
-
             document.add(new Paragraph(" "));
 
             PdfPTable tabla = new PdfPTable(1);
+            tabla.setWidthPercentage(100);
             PdfPCell celda = new PdfPCell(new Paragraph(datosconfig.getRucConf() + "\n"
                     + datoscomprobante.getTipoComp() + " ELECTRONICA" + "\n"
                     + datoscomprobante.getSerieComp(), fontTitulo));
@@ -120,37 +120,115 @@ public class PDF {
             document.add(new Paragraph(" "));
 
             PdfPTable detalle = new PdfPTable(5);
-            float anchoTabla = anchoPuntos - margenIzquierdo - margenDerecho;
-            float[] columnWidths = {anchoTabla * 0.1f, anchoTabla * 0.1f, anchoTabla * 0.4f, anchoTabla * 0.1f, anchoTabla * 0.1f};
+            detalle.setWidthPercentage(100);
+            float[] columnWidths = {10, 10, 40, 10, 10};
             detalle.setWidths(columnWidths);
 
             PdfPCell celdaCantidad = new PdfPCell(new Paragraph("Cantidad", fontNegrita));
+            configurarBordes(celdaCantidad, true, true, false, false);  // Bordes en la parte superior e inferior
             celdaCantidad.setHorizontalAlignment(Element.ALIGN_CENTER);
             detalle.addCell(celdaCantidad);
 
             PdfPCell celdaUnidad = new PdfPCell(new Paragraph("UN", fontNegrita));
+            configurarBordes(celdaUnidad, true, true, false, false);
             celdaUnidad.setHorizontalAlignment(Element.ALIGN_CENTER);
             detalle.addCell(celdaUnidad);
 
             PdfPCell celdaProducto = new PdfPCell(new Paragraph("Producto", fontNegrita));
+            configurarBordes(celdaProducto, true, true, false, false);
             celdaProducto.setHorizontalAlignment(Element.ALIGN_CENTER);
             detalle.addCell(celdaProducto);
 
             PdfPCell celdaPV = new PdfPCell(new Paragraph("PV", fontNegrita));
+            configurarBordes(celdaPV, true, true, false, false);
             celdaPV.setHorizontalAlignment(Element.ALIGN_CENTER);
             detalle.addCell(celdaPV);
 
             PdfPCell celdaTotal = new PdfPCell(new Paragraph("Total", fontNegrita));
+            configurarBordes(celdaTotal, true, true, false, false);
             celdaTotal.setHorizontalAlignment(Element.ALIGN_CENTER);
             detalle.addCell(celdaTotal);
 
-            detalle.addCell(new Paragraph(String.valueOf(datosdetcomprobante.getCantidadDcomp()), fontNormal));
-            detalle.addCell(new Paragraph(datosdetcomprobante.getTipunidDcomp(), fontNormal));
-            detalle.addCell(new Paragraph(datosdetcomprobante.getDescripcionDcomp(), fontNormal));
-            detalle.addCell(new Paragraph(String.valueOf(datosdetcomprobante.getValorunitarioDcomp()), fontNormal));
-            detalle.addCell(new Paragraph(String.valueOf(datosdetcomprobante.getPreciounitarioDcomp()), fontNormal));
+            PdfPCell celdaCantidadDetalle = new PdfPCell(new Paragraph(String.valueOf(datosdetcomprobante.getCantidadDcomp()), fontNormal));
+            celdaCantidadDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
+            configurarBordes(celdaCantidadDetalle, true, true, false, false);
+            detalle.addCell(celdaCantidadDetalle);
+
+            PdfPCell celdaUnidadDetalle = new PdfPCell(new Paragraph(datosdetcomprobante.getTipunidDcomp(), fontNormal));
+            celdaUnidadDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
+            configurarBordes(celdaUnidadDetalle, true, true, false, false);
+            detalle.addCell(celdaUnidadDetalle);
+
+            PdfPCell celdaProductoDetalle = new PdfPCell(new Paragraph(datosdetcomprobante.getDescripcionDcomp(), fontNormal));
+            celdaProductoDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
+            configurarBordes(celdaProductoDetalle, true, true, false, false);
+            detalle.addCell(celdaProductoDetalle);
+
+            PdfPCell celdaPVDetalle = new PdfPCell(new Paragraph(String.valueOf(datosdetcomprobante.getValorunitarioDcomp()), fontNormal));
+            celdaPVDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
+            configurarBordes(celdaPVDetalle, true, true, false, false);
+            detalle.addCell(celdaPVDetalle);
+
+            PdfPCell celdaTotalDetalle = new PdfPCell(new Paragraph(String.valueOf(datosdetcomprobante.getPreciounitarioDcomp()), fontNormal));
+            celdaTotalDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
+            configurarBordes(celdaTotalDetalle, true, true, false, false);
+            detalle.addCell(celdaTotalDetalle);
 
             document.add(detalle);
+
+            Paragraph subtotalg = new Paragraph("Sub Total  S/  " + datoscomprobante.getTotalventgravComp(), fontNormal);
+            subtotalg.setAlignment(Element.ALIGN_RIGHT);
+            document.add(subtotalg);
+            /*Paragraph afectog = new Paragraph("Afecto   S/  0.00",fontNormal);
+            afectog.setAlignment(Element.ALIGN_RIGHT);
+            document.add(afectog); */
+            Paragraph igvg = new Paragraph("IGV (18%)      S/ " + datoscomprobante.getIgvComp(), fontNormal);
+            igvg.setAlignment(Element.ALIGN_RIGHT);
+            document.add(igvg);
+            Paragraph totalg = new Paragraph("Total     S/  " + datoscomprobante.getImptotalComp(), fontNegrita);
+            totalg.setAlignment(Element.ALIGN_RIGHT);
+            document.add(totalg);
+            document.add(new Paragraph("______________________________"));
+            Paragraph montotexto = new Paragraph(convertir.Convertir(String.valueOf(datoscomprobante.getImptotalComp()), true), fontSubtitulo);
+            document.add(montotexto);
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph("TIPO DE PAGO: CONTADO", fontNegrita));
+                
+            /*----*/
+            // Obtén la instancia de la imagen QR
+            Image imagenqr2 = Image.getInstance(rutaqr);
+
+            // Calcula el nuevo ancho y alto de la imagen reducida al 50%
+            float nuevoAncho2 = (anchoPuntos - margenIzquierdo - margenDerecho) ;
+            float nuevoAlto2 = imagenqr2.getHeight() * (nuevoAncho2 / imagenqr2.getWidth());
+
+            // Escala la imagen a las nuevas dimensiones
+            imagenqr2.scaleAbsolute(nuevoAncho2, nuevoAlto2);
+
+            // Ajusta la imagen al tamaño de la hoja
+            float anchoImagenQR = anchoPuntos - margenIzquierdo - margenDerecho - 50 - 55; // Ajusta según tus necesidades
+
+            imagenqr2.scaleToFit(anchoImagenQR, imagenqr2.getScaledHeight());
+
+            // Centra la imagen QR horizontalmente
+            imagenqr2.setAbsolutePosition((anchoPuntos - imagenqr2.getScaledWidth()) / 2, imagenqr2.getAbsoluteY());
+
+            // Agrega la imagen al PDF antes del título
+            document.add(imagenqr2);
+
+            Paragraph thash = new Paragraph(datoscomprobante.getHashComp(), fontNormal);
+            thash.setAlignment(Element.ALIGN_CENTER);
+            document.add(thash);
+            
+            document.add(new Paragraph("Representación impresa de la factura electrónica generada desde el Sistema Facturador SUNAT, "
+                    + "usted puede consultar con su CLAVE SOL.", fontNegrita));
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph("Gracias por su prefencia.", fontNegrita));
+            
+
+            Paragraph texto3 = new Paragraph(datosconfig.getTxt3Conf(), fontTerminos);
+            texto3.setAlignment(Element.ALIGN_JUSTIFIED);
+            document.add(texto3);
 
             document.close();
             System.out.println("PDF creado exitosamente: " + rutaPDF);
@@ -158,5 +236,22 @@ public class PDF {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al crear el PDF: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void configurarBordes(PdfPCell celda, boolean top, boolean bottom, boolean left, boolean right) {
+        int border = 0;
+        if (top) {
+            border |= Rectangle.TOP;
+        }
+        if (bottom) {
+            border |= Rectangle.BOTTOM;
+        }
+        if (left) {
+            border |= Rectangle.LEFT;
+        }
+        if (right) {
+            border |= Rectangle.RIGHT;
+        }
+        celda.setBorder(border);
     }
 }

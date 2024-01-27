@@ -278,6 +278,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
 
         jLabel11.setText("RUC:");
 
+        btnbempresa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/lupa.png"))); // NOI18N
         btnbempresa.setText("Buscar");
         btnbempresa.setEnabled(false);
         btnbempresa.addActionListener(new java.awt.event.ActionListener() {
@@ -331,13 +332,14 @@ public class Pasajes extends javax.swing.JInternalFrame {
                 .addGroup(pnlfacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
                     .addComponent(txtdireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos Pasajero"));
 
         jLabel3.setText("DNI:");
 
+        btnbpersona.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/lupa.png"))); // NOI18N
         btnbpersona.setText("Buscar");
         btnbpersona.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -415,7 +417,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
                         .addComponent(txtcomprobante, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(txttipocomprobante, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -463,6 +465,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
 
         jLabel9.setText("Destino:");
 
+        btncambiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/flechas.png"))); // NOI18N
         btncambiar.setText("Cambiar");
         btncambiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -529,6 +532,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
                 .addGap(0, 7, Short.MAX_VALUE))
         );
 
+        btncomprobante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/guardar.png"))); // NOI18N
         btncomprobante.setText("Generar Comprobante");
         btncomprobante.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

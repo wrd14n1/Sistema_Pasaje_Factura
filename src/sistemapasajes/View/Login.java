@@ -46,11 +46,14 @@ public class Login extends javax.swing.JInternalFrame {
         pswusuario = new javax.swing.JPasswordField();
         btningresar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setTitle("Acceso");
 
         jLabel1.setText("Usuario:");
 
+        btningresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/marca-de-verificacion.png"))); // NOI18N
         btningresar.setText("Ingresar");
         btningresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -59,6 +62,8 @@ public class Login extends javax.swing.JInternalFrame {
         });
 
         jLabel2.setText("Clave:");
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/privacidad.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -69,19 +74,25 @@ public class Login extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btningresar)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(pswusuario, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
-                            .addComponent(txtusuario))))
+                            .addComponent(txtusuario, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                            .addComponent(pswusuario))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(115, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addGap(108, 108, 108))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtusuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -91,7 +102,7 @@ public class Login extends javax.swing.JInternalFrame {
                     .addComponent(jLabel2))
                 .addGap(18, 18, 18)
                 .addComponent(btningresar)
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -124,6 +135,7 @@ public class Login extends javax.swing.JInternalFrame {
     private javax.swing.JButton btningresar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPasswordField pswusuario;
     private javax.swing.JTextField txtusuario;
     // End of variables declaration//GEN-END:variables

@@ -104,6 +104,7 @@ String rutaqr;
         ));
         jScrollPane1.setViewportView(tabpasajes);
 
+        btnpdf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/pdf.png"))); // NOI18N
         btnpdf.setText("Crear PDF");
         btnpdf.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -117,20 +118,20 @@ String rutaqr;
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 707, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnpdf)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 820, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnpdf)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnpdf)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnpdf)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -141,6 +142,7 @@ String rutaqr;
        RutaArchivoDAO rutaarchivodao = new RutaArchivoDAOImpl();
       
         String rhash ;
+        String rutaqrgen = null;
                 
          ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
          ConfiguracionModel configuracion = configdao.obtenerConfiguracionPorId(1);      
@@ -189,6 +191,7 @@ String rutaqr;
                     monto+"|"+ numDocumento+"|"+rhash;
             GenerarQR genqr = new GenerarQR();
             genqr.GenerarQR(datos, numComprobante, rqr);
+            rutaqrgen=rqr + numComprobante+".jpg";
              
         } catch (IOException ex) {
             System.out.println("error: " + ex);
@@ -207,7 +210,7 @@ String rutaqr;
         
         PDF pdf = new PDF();
                 
-        pdf.crearPDF(configuracion,datoscomprobante,datosdetcomprobante,empresa);
+        pdf.crearPDF(configuracion,datoscomprobante,datosdetcomprobante,empresa,rutaqrgen);
     } else {
         // No se ha seleccionado ninguna fila, puedes mostrar un mensaje o realizar cualquier otra acción
         System.out.println("Ninguna fila seleccionada");

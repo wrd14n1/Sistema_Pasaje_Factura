@@ -67,6 +67,10 @@ public class Api extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabapi = new javax.swing.JTable();
 
+        setClosable(true);
+        setIconifiable(true);
+        setTitle("Configuración API");
+
         jLabel1.setText("URL:");
 
         jLabel2.setText("Descripción:");

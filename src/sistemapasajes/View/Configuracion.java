@@ -184,6 +184,7 @@ public class Configuracion extends javax.swing.JInternalFrame {
 
         jLabel4.setText("Dirección:");
 
+        btnguardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/guardar.png"))); // NOI18N
         btnguardar.setText("Guardar");
         btnguardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -199,6 +200,7 @@ public class Configuracion extends javax.swing.JInternalFrame {
 
         txtarchivo.setEditable(false);
 
+        btnsunat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/lupa.png"))); // NOI18N
         btnsunat.setText("Buscar");
         btnsunat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -206,6 +208,7 @@ public class Configuracion extends javax.swing.JInternalFrame {
             }
         });
 
+        btnarchivo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/lupa.png"))); // NOI18N
         btnarchivo.setText("Buscar");
         btnarchivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -231,6 +234,7 @@ public class Configuracion extends javax.swing.JInternalFrame {
 
         txtlogo.setEditable(false);
 
+        btnlogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/lupa.png"))); // NOI18N
         btnlogo.setText("Buscar");
         btnlogo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -256,6 +260,7 @@ public class Configuracion extends javax.swing.JInternalFrame {
 
         jLabel10.setText("Texto 3:");
 
+        btnactualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/actualizar.png"))); // NOI18N
         btnactualizar.setText("Actualizar");
         btnactualizar.setEnabled(false);
         btnactualizar.addActionListener(new java.awt.event.ActionListener() {
@@ -369,7 +374,7 @@ public class Configuracion extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnguardar)
                     .addComponent(btnactualizar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
