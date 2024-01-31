@@ -53,6 +53,12 @@ public class Login extends javax.swing.JInternalFrame {
 
         jLabel1.setText("Usuario:");
 
+        pswusuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pswusuarioActionPerformed(evt);
+            }
+        });
+
         btningresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/marca-de-verificacion.png"))); // NOI18N
         btningresar.setText("Ingresar");
         btningresar.addActionListener(new java.awt.event.ActionListener() {
@@ -109,8 +115,14 @@ public class Login extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btningresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btningresarActionPerformed
+        ingresar();
+    }//GEN-LAST:event_btningresarActionPerformed
 
-       
+    private void pswusuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pswusuarioActionPerformed
+       ingresar();
+    }//GEN-LAST:event_pswusuarioActionPerformed
+ public void ingresar(){
+           
         String usuario = txtusuario.getText();
         String password = pswusuario.getText();
         usuariolog = logindao.loginUsuario(usuario, password);
@@ -126,10 +138,7 @@ public class Login extends javax.swing.JInternalFrame {
               JOptionPane.showMessageDialog(null, "Error: NO EXISTE USUARIO O NO COINCIDE LOS DATOS, POR FAVOR INTENTE DE NUEVO " , "Error", JOptionPane.ERROR_MESSAGE);
         }
         
-
-
-    }//GEN-LAST:event_btningresarActionPerformed
-
+ }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btningresar;

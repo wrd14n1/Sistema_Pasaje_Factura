@@ -85,8 +85,9 @@ public class Ruta extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel2.setText("Costo del Pasaje:");
+        jLabel2.setText("Costo Referencial:");
 
+        btnguardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/guardar.png"))); // NOI18N
         btnguardar.setText("Guardar");
         btnguardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

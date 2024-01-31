@@ -59,7 +59,8 @@ String rutaqr;
         modeloTabla.addColumn("Fecha");
         modeloTabla.addColumn("Monto");
         ComprobanteDAO comprobantedao = new ComprobanteDAOImpl();
-        List<ComprobanteModel> comprobantes = comprobantedao.obtenerTodosComprobantes();
+         List<ComprobanteModel> comprobantes = comprobantedao.obtenerTodosComprobantes();
+        //List<ComprobanteModel> comprobantes = comprobantedao.obtenerComprobantesporEstado("XML GENERADO");
         for (ComprobanteModel comprobante: comprobantes) {
             Object[] fila ={
                 comprobante.getSerieComp(),
@@ -86,10 +87,11 @@ String rutaqr;
         jScrollPane1 = new javax.swing.JScrollPane();
         tabpasajes = new javax.swing.JTable();
         btnpdf = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
-        setTitle("Lista de Pasajes");
+        setTitle("Lista de Pasajes con XML");
 
         tabpasajes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -112,6 +114,9 @@ String rutaqr;
             }
         });
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/lupa.png"))); // NOI18N
+        jButton1.setText("VER PASAJES SIN XML GENERADO");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -122,6 +127,8 @@ String rutaqr;
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 820, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnpdf)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -129,7 +136,9 @@ String rutaqr;
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnpdf)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnpdf)
+                    .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -192,6 +201,10 @@ String rutaqr;
             GenerarQR genqr = new GenerarQR();
             genqr.GenerarQR(datos, numComprobante, rqr);
             rutaqrgen=rqr + numComprobante+".jpg";
+            
+            //Actualizar el Estado
+            comprobante.setEstadoComp("PDF GENERADO");
+            comprobantedao.actualizarPorEstadoComprobante(comprobante);
              
         } catch (IOException ex) {
             System.out.println("error: " + ex);
@@ -220,6 +233,7 @@ String rutaqr;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnpdf;
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabpasajes;
     // End of variables declaration//GEN-END:variables

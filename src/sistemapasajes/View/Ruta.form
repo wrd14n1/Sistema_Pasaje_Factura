@@ -107,13 +107,16 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Costo del Pasaje:"/>
+        <Property name="text" type="java.lang.String" value="Costo Referencial:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtprecio">
     </Component>
     <Component class="javax.swing.JButton" name="btnguardar">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/recursos/guardar.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Guardar"/>
       </Properties>
       <Events>

@@ -128,8 +128,8 @@ public class ComprobanteDAOImpl implements ComprobanteDAO {
     public void agregarComprobante(ComprobanteModel comprobante) {
         String query = "INSERT INTO comprobante (tipo_comp, serie_comp, doccliente_comp,cliente_comp, fecha_comp,"
                 + "moneda_comp, mediopago_comp, totalventgrav_comp, igv_comp, imptotal_comp,"
-                + "fechaxml_comp, fechaenvio_comp, estado_comp, hora_comp) "
-                + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "fechaxml_comp, fechaenvio_comp, estado_comp, hora_comp, afec_comp) "
+                + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setString(1, comprobante.getTipoComp());
             stmt.setString(2, comprobante.getSerieComp());
@@ -141,10 +141,11 @@ public class ComprobanteDAOImpl implements ComprobanteDAO {
             stmt.setDouble(8, comprobante.getTotalventgravComp());
             stmt.setDouble(9, comprobante.getIgvComp());
             stmt.setDouble(10, comprobante.getImptotalComp());
-            stmt.setString(11,comprobante.getFechaxmlComp());
-            stmt.setString(12,comprobante.getFechaenvioComp());
-            stmt.setString(13,comprobante.getEstadoComp());
+            stmt.setString(11, comprobante.getFechaxmlComp());
+            stmt.setString(12, comprobante.getFechaenvioComp());
+            stmt.setString(13, comprobante.getEstadoComp());
             stmt.setString(14, comprobante.getHoraComp());
+            stmt.setString(15, comprobante.getAfecComp());
 
             stmt.executeUpdate();
             JOptionPane.showMessageDialog(null, "Comprobante agregado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
@@ -189,20 +190,19 @@ public class ComprobanteDAOImpl implements ComprobanteDAO {
         String fechaxmlComp = rs.getString("fechaxml_comp");
         String fechaenvioComp = rs.getString("fechaenvio_comp");
         String estadoComp = rs.getString("estado_comp");
-
-        return new ComprobanteModel(idComp, tipoComp, serieComp, docclienteComp,clienteComp, fechaComp, horaComp,monedaComp,
-                mediopagoComp, totalventgravComp, igvComp, imptotalComp, hashComp, fechaxmlComp, fechaenvioComp, estadoComp);
+        String afecComp = rs.getString("afec_comp");
+        return new ComprobanteModel(idComp, tipoComp, serieComp, docclienteComp, clienteComp, fechaComp, horaComp, monedaComp,
+                mediopagoComp, totalventgravComp, igvComp, imptotalComp, hashComp, fechaxmlComp, fechaenvioComp, estadoComp, afecComp);
     }
 
     @Override
     public void actualizarComprobanteHash(ComprobanteModel comprobante) {
-                String query = "UPDATE comprobante SET hash_comp = ? WHERE serie_comp = ?";
+        String query = "UPDATE comprobante SET hash_comp = ? , estado_comp=? WHERE serie_comp = ?";
 
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setString(1, comprobante.getHashComp());
-            stmt.setString(2, comprobante.getSerieComp());
-
-
+            stmt.setString(2, "XML GENERADO");
+            stmt.setString(3, comprobante.getSerieComp());
 
             stmt.executeUpdate();
         } catch (SQLException ex) {
@@ -216,6 +216,56 @@ public class ComprobanteDAOImpl implements ComprobanteDAO {
                 System.out.println("Error al desconectar" + ex.getMessage());
             }
         }
- }
+    }
+
+    @Override
+    public List<ComprobanteModel> obtenerComprobantesporEstado(String estadoComp) {
+        List<ComprobanteModel> comprobantes = new ArrayList<>();
+        String query = "SELECT * FROM comprobante WHERE estado_comp=?";
+        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+            stmt.setString(1, estadoComp); // Establecer el valor del parámetro
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    ComprobanteModel comprobante = obtenerComprobanteDesdeResultSet(rs);
+                    
+                    comprobantes.add(comprobante);
+                }
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al cargar los datos de los Comprobantes: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            Conexion desconectar = new Conexion();
+            try {
+                desconectar.desconectar();
+                System.out.println("Desconexión exitosa.");
+            } catch (SQLException ex) {
+                System.out.println("Error al desconectar" + ex.getMessage());
+            }
+        }
+
+        return comprobantes;
+    }
+
+    @Override
+    public void actualizarPorEstadoComprobante(ComprobanteModel comprobante) {
+        String query = "UPDATE comprobante SET estado_comp = ? WHERE serie_comp = ?";
+
+        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+            stmt.setString(1, comprobante.getEstadoComp());
+            stmt.setString(2, comprobante.getSerieComp());
+
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error DAO - Actualizar Hash Comprobante: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            Conexion desconectar = new Conexion();
+            try {
+                desconectar.desconectar();
+                System.out.println("Desconexión exitosa.");
+            } catch (SQLException ex) {
+                System.out.println("Error al desconectar" + ex.getMessage());
+            }
+        }
+    }
 
 }

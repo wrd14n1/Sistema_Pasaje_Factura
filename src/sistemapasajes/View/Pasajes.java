@@ -7,6 +7,7 @@ package sistemapasajes.View;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
@@ -29,9 +30,13 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import sistemapasajes.ArchivosPlanos;
+
 import sistemapasajes.dao.ApiDAO;
 import sistemapasajes.dao.ApiDAOImpl;
 import sistemapasajes.dao.ComprobanteDAO;
@@ -51,6 +56,7 @@ import sistemapasajes.dao.SerieDAOImpl;
 import sistemapasajes.dao.VehiculoDAO;
 import sistemapasajes.dao.VehiculoDAOImpl;
 import sistemapasajes.modelo.ComprobanteModel;
+import sistemapasajes.modelo.ConfiguracionModel;
 import sistemapasajes.modelo.DcomprobanteModel;
 import sistemapasajes.modelo.EmpresaModel;
 import sistemapasajes.modelo.PasajeroModel;
@@ -64,7 +70,6 @@ import sistemapasajes.modelo.VehiculoModel;
  */
 public class Pasajes extends javax.swing.JInternalFrame {
 
-    String json;
     List<RutaModel> listarutas;
     int numero;
     String numserie;
@@ -73,6 +78,12 @@ public class Pasajes extends javax.swing.JInternalFrame {
     String rucempresa;
     String tipocompsunat;
     String tipdoccli;
+    ConfiguracionDAO configuraciondao = new ConfiguracionDAOImpl();
+    ConfiguracionModel configuracion = new ConfiguracionModel();
+     String json;
+    ApiDAO apidao = new ApiDAOImpl();
+    
+    //String rjson = null;
 
     /**
      * Creates new form Pasajes
@@ -83,8 +94,9 @@ public class Pasajes extends javax.swing.JInternalFrame {
         inicializarComboBoxVehiculos();
 
         String rutalogo;
-        ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
-        rutalogo = configdao.obtenerConfiguracionPorId(1).getLogoConf();
+        //ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
+        configuracion = configuraciondao.obtenerConfiguracionPorId(1);
+        rutalogo = configuracion.getLogoConf();
         System.out.println(rutalogo);
         mostrarImagen(rutalogo);
 
@@ -98,12 +110,72 @@ public class Pasajes extends javax.swing.JInternalFrame {
         txtcomprobante.setText(numserie);//txtcomprobante.setText(numserie);
         txttipocomprobante.setText(tiposerie);
         //jDateChooser1.setDate(hoy);
-        rutasunat = configdao.obtenerConfiguracionPorId(1).getRutaSunat();
-        rucempresa = configdao.obtenerConfiguracionPorId(1).getRucConf();
+        rutasunat = configuracion.getRutaSunat();
+        rucempresa = configuracion.getRucConf();
 
     }
     // Método para cargar y mostrar la imagen en el JLabel
 
+        
+    public String realizarConsultaApi(String apiUrl) throws IOException {
+        int intentosMaximos = 5;
+        int intentoActual = 0;
+
+        while (intentoActual < intentosMaximos) {
+            try {
+                URL url = new URL(apiUrl);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                // Establecer el método de solicitud
+                connection.setRequestMethod("GET");
+
+                // Obtener la respuesta
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                    json = response.toString();
+                    return json;
+                } finally {
+                    // Asegúrate de cerrar la conexión
+                    
+                    connection.disconnect();
+                }
+            } catch (IOException ex) {
+                // Manejar la excepción (puedes registrarla o imprimir el mensaje)
+                String errorMessage = "Error en el intento " + (intentoActual + 1) + ": " + ex.getMessage();
+                System.out.println(errorMessage);
+
+                // Mostrar el mensaje de error en un JOptionPane
+                //JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+                // Incrementar el contador de intentos y esperar antes de reintentar
+                intentoActual++;
+                esperarAntesDeReintentar();
+            }
+        }
+
+        // Si llegamos aquí, todos los intentos han fallado
+        String errorFinal = "No se encontrado el número de RUC o DNI consultado, se realizará nuevamente la consulta; Si problema persiste el número de RUC o DNI no es válido.";
+        System.out.println(errorFinal);
+
+        // Mostrar el mensaje final en un JOptionPane
+        JOptionPane.showMessageDialog(null, errorFinal, "Error", JOptionPane.ERROR_MESSAGE);
+
+        throw new IOException(errorFinal);
+    }
+
+    private void esperarAntesDeReintentar() {
+        try {
+            // Puedes ajustar el tiempo de espera según tus necesidades
+            Thread.sleep(500); // Esperar 1 segundo antes de reintentar
+        } catch (InterruptedException e) {
+            // Manejar la excepción si es necesario
+            Thread.currentThread().interrupt();
+        }
+    }
+    
     public void mostrarImagen(String rutaImagen) {
         try {
             // Lee la imagen desde el archivo
@@ -172,56 +244,6 @@ public class Pasajes extends javax.swing.JInternalFrame {
         }
     }
 
-    // Otros métodos de tu clase
-    private String realizarConsultaApi(String apiUrl) throws IOException {
-        int intentosMaximos = 5;
-        int intentoActual = 0;
-
-        while (intentoActual < intentosMaximos) {
-            try {
-                URL url = new URL(apiUrl);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-                // Establecer el método de solicitud
-                connection.setRequestMethod("GET");
-
-                // Obtener la respuesta
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-                    StringBuilder response = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        response.append(line);
-                    }
-                    json = response.toString();
-                    return response.toString();
-                } finally {
-                    // Asegúrate de cerrar la conexión
-                    connection.disconnect();
-                }
-            } catch (IOException ex) {
-                // Manejar la excepción (puedes registrarla o imprimir el mensaje)
-                System.out.println("Error en el intento " + (intentoActual + 1) + ": " + ex.getMessage());
-
-                // Incrementar el contador de intentos y esperar antes de reintentar
-                intentoActual++;
-                esperarAntesDeReintentar();
-            }
-        }
-
-        // Si llegamos aquí, todos los intentos han fallado
-        throw new IOException("Se agotaron los intentos para realizar la consulta API");
-    }
-
-    private void esperarAntesDeReintentar() {
-        try {
-            // Puedes ajustar el tiempo de espera según tus necesidades
-            Thread.sleep(500); // Esperar 1 segundo antes de reintentar
-        } catch (InterruptedException e) {
-            // Manejar la excepción si es necesario
-            Thread.currentThread().interrupt();
-        }
-    }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -235,12 +257,14 @@ public class Pasajes extends javax.swing.JInternalFrame {
         txtrazon = new javax.swing.JTextField();
         txtdireccion = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
+        btnnempresa = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         txtdni = new javax.swing.JTextField();
         btnbpersona = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         txtpasajero = new javax.swing.JTextField();
+        btnnpasajero = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         chkbfactura = new javax.swing.JCheckBox();
         jLabel10 = new javax.swing.JLabel();
@@ -295,6 +319,13 @@ public class Pasajes extends javax.swing.JInternalFrame {
 
         jLabel13.setText("Dirección:");
 
+        btnnempresa.setText("Nuevo");
+        btnnempresa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnnempresaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlfacturaLayout = new javax.swing.GroupLayout(pnlfactura);
         pnlfactura.setLayout(pnlfacturaLayout);
         pnlfacturaLayout.setHorizontalGroup(
@@ -315,7 +346,9 @@ public class Pasajes extends javax.swing.JInternalFrame {
                     .addGroup(pnlfacturaLayout.createSequentialGroup()
                         .addComponent(jLabel13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtdireccion)))
+                        .addComponent(txtdireccion)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnnempresa)))
                 .addContainerGap())
         );
         pnlfacturaLayout.setVerticalGroup(
@@ -331,7 +364,8 @@ public class Pasajes extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlfacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
-                    .addComponent(txtdireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtdireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnnempresa))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -351,6 +385,13 @@ public class Pasajes extends javax.swing.JInternalFrame {
 
         txtpasajero.setEditable(false);
 
+        btnnpasajero.setText("Nuevo");
+        btnnpasajero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnnpasajeroActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -366,6 +407,8 @@ public class Pasajes extends javax.swing.JInternalFrame {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtpasajero)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnnpasajero)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -377,7 +420,8 @@ public class Pasajes extends javax.swing.JInternalFrame {
                         .addComponent(txtdni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnbpersona)
                         .addComponent(jLabel4)
-                        .addComponent(txtpasajero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtpasajero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnnpasajero))
                     .addComponent(jLabel3))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
@@ -582,7 +626,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnbpersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbpersonaActionPerformed
-        ApiDAO apidao = new ApiDAOImpl();
+
         String dni = txtdni.getText().trim();
         //CONSULTAR A API PARA PODER REGISTRARLO
         String url = null;// Obtener el texto y eliminar espacios en blanco
@@ -598,12 +642,13 @@ public class Pasajes extends javax.swing.JInternalFrame {
                 txtpasajero.setText(pasajero.getApePsje() + " " + pasajero.getNomPsje());
             } else {
                 // No se encontró el pasajero, muestra un JOptionPane
-                JOptionPane.showMessageDialog(null, "Pasajero no encontrado", "Información", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Pasajero no se encuentra en la Base de Datos Interna, se realizará una consulta externa. \n Espere por favor.", "Información", JOptionPane.INFORMATION_MESSAGE);
 
                 //CONSULTAR A API PARA PODER REGISTRARLO
                 url = apidao.obtenerApiPorId(1).getUrlApi() + dni;
                 try {
                     realizarConsultaApi(url);
+                    json = realizarConsultaApi(url);
                 } catch (IOException ex) {
                     Logger.getLogger(Pasajes.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -626,6 +671,8 @@ public class Pasajes extends javax.swing.JInternalFrame {
                     psjemodel.setNumdocPsje(numdoc);
                     psjemodel.setNomPsje(nombres);
                     psjemodel.setApePsje(apellidos);
+
+                    //AGREGAR PERSONA
                     pasajerodao.agregarPasajero(psjemodel);
 
                 } catch (IOException ex) {
@@ -687,7 +734,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_chkbfacturaActionPerformed
 
     private void btnbempresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbempresaActionPerformed
-        ApiDAO apidao = new ApiDAOImpl();
+
         String ruc = txtruc.getText().trim();
         //CONSULTAR A API PARA PODER REGISTRARLO
         String url = null;// Obtener el texto y eliminar espacios en blanco
@@ -704,12 +751,12 @@ public class Pasajes extends javax.swing.JInternalFrame {
                 txtdireccion.setText(empresa.getDireccionEmp());
             } else {
                 // No se encontró el pasajero, muestra un JOptionPane
-                JOptionPane.showMessageDialog(null, "Empresa no encontrada", "Información", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Empresa no se encuentra en la Base de Datos Interna, se realizará una consulta externa. \n Espere por favor.", "Información", JOptionPane.INFORMATION_MESSAGE);
 
                 //CONSULTAR A API PARA PODER REGISTRARLO
                 url = apidao.obtenerApiPorId(2).getUrlApi() + ruc;
                 try {
-                    realizarConsultaApi(url);
+                   realizarConsultaApi(url);
                 } catch (IOException ex) {
                     Logger.getLogger(Pasajes.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -759,7 +806,12 @@ public class Pasajes extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnbempresaActionPerformed
 
     private void btncomprobanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncomprobanteActionPerformed
-        if (!"".equals(txtdni.getText()) && jDateChooser1.getDate()!=null) {
+
+        if (!"".equals(txtdni.getText()) && jDateChooser1.getDate() != null
+                && (chkbfactura.isSelected() ? !"".equals(txtrazon.getText()) : !"".equals(txtpasajero.getText()))
+                && (chkbfactura.isSelected() ? !"".equals(txtruc.getText()) : !"".equals(txtdni.getText()))
+                && !"".equals(txtorigen.getText()) && !"".equals(txtdestino.getText())
+                && cbruta.getSelectedIndex() != 0 && cbvehiculo.getSelectedIndex() != 0) {
 
             try {
 
@@ -775,7 +827,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
                 String cliente = chkbfactura.isSelected() ? txtrazon.getText() : txtpasajero.getText();
                 String docliente = chkbfactura.isSelected() ? txtruc.getText() : txtdni.getText();
                 String servicio = "SERVICIO DE TRANSPORTE DE PASAJEROS Origen: " + txtorigen.getText() + " Destino: "
-                        + txtdestino.getText() + "PASAJERO: " + txtpasajero.getText();
+                        + txtdestino.getText() + " PASAJERO: " + txtpasajero.getText();
 
                 Date fecha = jDateChooser1.getDate();
                 String fechaformato = convertirFecha(fecha);
@@ -794,7 +846,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
                 String fechaformato1 = convertirFecha(fecha);
                 String fechaformato2 = convertirFecha(fecha);
 
-                String estado = "NO GENERADO";
+                String estado = "XML NO GENERADO";
 
                 // Crear comprobante
                 ComprobanteModel comprobante = new ComprobanteModel();
@@ -812,6 +864,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
                 comprobante.setFechaenvioComp(fechaformato2);
                 comprobante.setEstadoComp(estado);
                 comprobante.setHoraComp(horatexto);
+                comprobante.setAfecComp("EXONERADO");
 
                 comprobantedao.agregarComprobante(comprobante);
 
@@ -851,13 +904,30 @@ public class Pasajes extends javax.swing.JInternalFrame {
                 tipocompsunat = seriedao.obtenerTipoSerie(tipo, codserie).getCodsunatSerie();
 
                 //CREACIÓN ARCHIVOS PLANOS
-                archivos.ArchivoPlanoCAB(rutasunat, rucempresa, tipocompsunat, tipdoccli, numserie, obtenerComprobante);
-                archivos.ArchivoPlanoDET(rutasunat, rucempresa, tipocompsunat, numserie, obtenerDcomprobante);
-                archivos.ArchivoPlanoTRI(rutasunat, rucempresa, tipocompsunat, numserie, obtenerComprobante);
-                archivos.ArchivoPlanoLEY(rutasunat, rucempresa, tipocompsunat, numserie, obtenerComprobante);
-                archivos.ArchivoPlanoACA(rutasunat, rucempresa, tipocompsunat, numserie, obtenerComprobante);
-                archivos.ArchivoPlanoPAG(rutasunat, rucempresa, tipocompsunat, numserie, obtenerComprobante);
+                archivos.ArchivoPlanoCAB(configuracion, tipocompsunat, tipdoccli, obtenerComprobante);
+                archivos.ArchivoPlanoDET(configuracion, tipocompsunat,  obtenerDcomprobante, obtenerComprobante);
+                archivos.ArchivoPlanoTRI(configuracion, tipocompsunat,  obtenerComprobante);
+                archivos.ArchivoPlanoLEY(configuracion, tipocompsunat,  obtenerComprobante);
+                archivos.ArchivoPlanoACA(configuracion, tipocompsunat,  obtenerComprobante);
+                archivos.ArchivoPlanoPAG(configuracion, tipocompsunat,  obtenerComprobante);
                 JOptionPane.showMessageDialog(null, "Archivos Planos Generados Correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+
+                this.dispose();
+
+                JInternalFrame internalFrame = new Pasajes();
+
+                Principal.jDesktopPane1.add(internalFrame);
+                // Calcular la posición para centrar el JInternalFrame
+                Dimension desktopSize = Principal.jDesktopPane1.getSize();
+                Dimension jInternalFrameSize = internalFrame.getSize();
+
+                int posX = (desktopSize.width - jInternalFrameSize.width) / 2;
+                int posY = (desktopSize.height - jInternalFrameSize.height) / 2;
+
+                // Establecer la ubicación centrada
+                internalFrame.setLocation(posX, posY);
+
+                internalFrame.setVisible(true);
 
             } catch (Exception ex) {
                 gestionarExcepcion(ex);
@@ -868,6 +938,27 @@ public class Pasajes extends javax.swing.JInternalFrame {
         }
 
     }//GEN-LAST:event_btncomprobanteActionPerformed
+
+    private void btnnpasajeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnnpasajeroActionPerformed
+       JInternalFrame internalFrame = new Pasajero();
+
+                Principal.jDesktopPane1.add(internalFrame);
+                // Calcular la posición para centrar el JInternalFrame
+                Dimension desktopSize = Principal.jDesktopPane1.getSize();
+                Dimension jInternalFrameSize = internalFrame.getSize();
+
+                int posX = (desktopSize.width - jInternalFrameSize.width) / 2;
+                int posY = (desktopSize.height - jInternalFrameSize.height) / 2;
+
+                // Establecer la ubicación centrada
+                internalFrame.setLocation(posX, posY);
+
+                internalFrame.setVisible(true);
+    }//GEN-LAST:event_btnnpasajeroActionPerformed
+
+    private void btnnempresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnnempresaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnnempresaActionPerformed
 
     private String convertirFecha(Date fecha) {
         if (fecha != null) {
@@ -890,6 +981,8 @@ public class Pasajes extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnbpersona;
     private javax.swing.JButton btncambiar;
     private javax.swing.JButton btncomprobante;
+    private javax.swing.JButton btnnempresa;
+    private javax.swing.JButton btnnpasajero;
     private javax.swing.JComboBox<String> cbruta;
     private javax.swing.JComboBox<String> cbvehiculo;
     private javax.swing.JCheckBox chkbfactura;
@@ -915,9 +1008,9 @@ public class Pasajes extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtcomprobante;
     private javax.swing.JTextField txtdestino;
     private javax.swing.JTextField txtdireccion;
-    private javax.swing.JTextField txtdni;
+    public static javax.swing.JTextField txtdni;
     private javax.swing.JTextField txtorigen;
-    private javax.swing.JTextField txtpasajero;
+    public static javax.swing.JTextField txtpasajero;
     private javax.swing.JTextField txtprecio;
     private javax.swing.JTextField txtrazon;
     private javax.swing.JTextField txtruc;

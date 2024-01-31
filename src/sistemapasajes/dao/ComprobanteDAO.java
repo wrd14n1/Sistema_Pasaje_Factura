@@ -16,8 +16,10 @@ public interface ComprobanteDAO {
     ComprobanteModel obtenerComprobanteporID (int idComp);
     ComprobanteModel obtenerComprobanteporNum(String numdocComp);
     List<ComprobanteModel> obtenerTodosComprobantes();
+    List<ComprobanteModel> obtenerComprobantesporEstado(String estadoComp);
     void agregarComprobante (ComprobanteModel comprobante);
     void actualizarComprobante  (ComprobanteModel comprobante);
+    void actualizarPorEstadoComprobante  (ComprobanteModel comprobante);
     void eliminarComprobante (int idComp);    
     void actualizarComprobanteHash(ComprobanteModel comprobante);
 }

@@ -27,6 +27,7 @@ public class ComprobanteModel {
     private String fechaxmlComp;
     private String fechaenvioComp;
     private String estadoComp;
+    private String afecComp;
     
     public ComprobanteModel(){
         
@@ -34,7 +35,7 @@ public class ComprobanteModel {
     
     public ComprobanteModel(int idComp, String tipoComp, String serieComp, String docclienteComp, String clienteComp, String fechaComp,
             String horaComp,String monedaComp, String mediopagoComp, Double totalventagravComp, Double igvComp, Double imptotalComp,
-            String hashComp,String fechaxmlComp, String fechaenvioComp, String estadoComp){
+            String hashComp,String fechaxmlComp, String fechaenvioComp, String estadoComp, String afecComp){
         this.idComp=idComp;
         this.tipoComp=tipoComp;
         this.serieComp=serieComp;
@@ -51,6 +52,7 @@ public class ComprobanteModel {
         this.fechaxmlComp=fechaxmlComp;
         this.fechaenvioComp=fechaenvioComp;
         this.estadoComp = estadoComp;
+        this.afecComp=afecComp;
         
     }
 
@@ -180,6 +182,14 @@ public class ComprobanteModel {
 
     public void setHashComp(String hashComp) {
         this.hashComp = hashComp;
+    }
+
+    public String getAfecComp() {
+        return afecComp;
+    }
+
+    public void setAfecComp(String afecComp) {
+        this.afecComp = afecComp;
     }
     
     

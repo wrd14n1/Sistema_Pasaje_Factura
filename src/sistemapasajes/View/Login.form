@@ -83,6 +83,9 @@
     <Component class="javax.swing.JTextField" name="txtusuario">
     </Component>
     <Component class="javax.swing.JPasswordField" name="pswusuario">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pswusuarioActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btningresar">
       <Properties>

@@ -7,15 +7,25 @@ package sistemapasajes.View;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import com.jtattoo.plaf.acryl.AcrylLookAndFeel;
 import com.jtattoo.plaf.fast.FastLookAndFeel;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.beans.PropertyVetoException;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import sistemapasajes.ProcessOutputReader;
 import sistemapasajes.Sunat;
 import sistemapasajes.dao.ConfiguracionDAO;
 import sistemapasajes.dao.ConfiguracionDAOImpl;
@@ -39,6 +49,7 @@ public class Principal extends javax.swing.JFrame {
         } catch (UnsupportedLookAndFeelException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
+        // Inicia maximizado
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
     }
@@ -63,6 +74,7 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem10 = new javax.swing.JMenuItem();
         menupasaje = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
@@ -145,6 +157,15 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         menuconf.add(jMenuItem6);
+
+        jMenuItem10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/respaldo.png"))); // NOI18N
+        jMenuItem10.setText("Respaldo Base de Datos");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        menuconf.add(jMenuItem10);
 
         jMenuBar1.add(menuconf);
 
@@ -244,49 +265,83 @@ public class Principal extends javax.swing.JFrame {
         centrarInternalFrame(vapi);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
+    /* PARA EJECUTAR
+    
+         try {
+            // Obtener la configuración desde el DAO
+            ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
+            ConfiguracionModel configuracion = configdao.obtenerConfiguracionPorId(1);
+
+            // Comprobar si se está ejecutando como administrador
+            boolean isAdmin = isAdmin();
+
+            // Si no se está ejecutando como administrador, volver a ejecutar con privilegios elevados
+            if (!isAdmin) {
+                String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+                String currentJar = new File(Principal.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
+                ProcessBuilder builder = new ProcessBuilder(javaBin, "-jar", currentJar);
+                builder.start();
+                System.exit(0);
+            }
+
+            // Construir la ruta completa del archivo JAR
+            String rutaJar = configuracion.getRutaSunat() + File.separator + "facturadorApp-1.4.jar";
+
+            // Obtener el directorio del archivo JAR
+            File directorioJar = new File(rutaJar).getParentFile();
+
+            // Construir la ruta completa del archivo YAML
+            String rutaYaml = configuracion.getRutaSunat() + File.separator + "prod.yaml";
+
+            // Crear el proceso para ejecutar el servidor
+            ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar", rutaJar, "server", rutaYaml);
+
+            // Redirigir la salida estándar y de error a un archivo de texto en el mismo directorio que el JAR
+            File archivoSalida = new File(directorioJar, "salida_del_proceso.txt");
+            processBuilder.redirectOutput(ProcessBuilder.Redirect.to(archivoSalida));
+            processBuilder.redirectError(ProcessBuilder.Redirect.appendTo(archivoSalida));
+
+            // Iniciar el proceso
+            Process proceso = processBuilder.start();
+
+            // Esperar a que el proceso termine
+            int resultado = proceso.waitFor();
+
+            // Leer la salida de error del proceso
+            BufferedReader errorReader = new BufferedReader(new InputStreamReader(proceso.getErrorStream()));
+            StringBuilder errorOutput = new StringBuilder();
+            String lineaError;
+            while ((lineaError = errorReader.readLine()) != null) {
+                errorOutput.append(lineaError).append("\n");
+            }
+
+            // Mostrar mensaje con el resultado y la salida de error
+            String mensaje = "Resultado: " + resultado + "\n\nSalida de Error:\n" + errorOutput.toString();
+            JOptionPane.showMessageDialog(null, mensaje, "Ejecución del Servidor", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (IOException | InterruptedException  ex) {
+            ex.printStackTrace();
+            // Mostrar mensaje en caso de excepción
+            String mensaje = "Error al ejecutar el servidor:\n" + ex.getMessage();
+            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    */
+    
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-
-   try {
-        // Ruta completa del archivo batch
-        ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
-        ConfiguracionModel configuracion = configdao.obtenerConfiguracionPorId(1);
-        String rutaBatch = configuracion.getRutaSunat()+"\\EjecutarSFS.bat";
-
-        // Crear el proceso para ejecutar el batch
-        ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/c", rutaBatch);
-
-        // Redirigir la salida estándar y de error al System.out
-        processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-        processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);
-
-        // Iniciar el proceso
-        Process proceso = processBuilder.start();
-
-        // Esperar a que el proceso termine
-        int resultado = proceso.waitFor();
-
-        // Imprimir el resultado (por ejemplo, el código de salida)
-        System.out.println("Resultado: " + resultado);
-
-        // Mostrar mensaje de éxito
-        JOptionPane.showMessageDialog(this, "Proceso completado exitosamente " + rutaBatch, "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
-    } catch (IOException | InterruptedException ex) {
-        ex.printStackTrace();
-        // Mostrar mensaje de error
-        JOptionPane.showMessageDialog(this, "Error al ejecutar el proceso: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    }
-        
+        Sunat.EjecutarSFS();
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+ 
         Navegador vnav;
         try {
             vnav = new Navegador();
             centrarInternalFrame(vnav);
         } catch (PropertyVetoException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }  
 
 
     }//GEN-LAST:event_jMenuItem8ActionPerformed
@@ -302,7 +357,45 @@ public class Principal extends javax.swing.JFrame {
         centrarInternalFrame(vlog);
     }//GEN-LAST:event_menuitemingresarActionPerformed
 
-    private void centrarInternalFrame(JInternalFrame internalFrame) {
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+                                              
+    // Código para realizar la copia de seguridad de la base de datos
+    ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
+            ConfiguracionModel configuracion = configdao.obtenerConfiguracionPorId(1);
+            String rutaBackup = configuracion.getRutaArchivo();
+            
+    String dbName = "bd_pasaje";
+    String dbUser = "root";
+    String dbPass = "020320";
+    String filePath = rutaBackup+"\\backup.sql";
+
+    try {
+        // Construir el comando para mysqldump
+        String[] command = {"mysqldump", "-u" + dbUser, "-p" + dbPass, dbName};
+
+        // Ejecutar el comando
+        ProcessBuilder processBuilder = new ProcessBuilder(command);
+        Process process = processBuilder.start();
+
+        // Obtener el flujo de salida del proceso
+        ProcessOutputReader outputReader = new ProcessOutputReader(process.getInputStream());
+        new Thread(outputReader).start();
+
+        // Esperar a que el proceso termine
+        int exitCode = process.waitFor();
+
+        // Verificar el código de salida
+        if (exitCode == 0) {
+            System.out.println("Copia de seguridad completada con éxito. Guardada en: " + filePath);
+        } else {
+            System.out.println("Error al realizar la copia de seguridad. Código de salida: " + exitCode);
+        }
+    } catch (IOException | InterruptedException e) {
+        e.printStackTrace();
+    }
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
+
+    public void centrarInternalFrame(JInternalFrame internalFrame) {
 
         // Agrega el internal frame al desktop pane
         jDesktopPane1.add(internalFrame);
@@ -332,9 +425,22 @@ public class Principal extends javax.swing.JFrame {
         internalFrame.setVisible(true);
     }
 
+    private boolean isAdmin() {
+        String groups[] = (new com.sun.security.auth.module.NTSystem()).getGroupIDs();
+        for (String group : groups) {
+            if (group.equals("S-1-5-32-544")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * @param args the command line arguments
      */
+    
+  
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -363,19 +469,23 @@ public class Principal extends javax.swing.JFrame {
         } catch (UnsupportedLookAndFeelException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Principal().setVisible(true);
+                
+     
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JDesktopPane jDesktopPane1;
+    public static javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private static javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;

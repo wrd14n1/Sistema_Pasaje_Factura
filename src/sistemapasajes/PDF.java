@@ -104,18 +104,24 @@ public class PDF {
             Paragraph fecha = new Paragraph(datoscomprobante.getFechaComp() + "   " + datoscomprobante.getHoraComp(), fontNormal);
             fecha.setAlignment(Element.ALIGN_LEFT);
             document.add(fecha);
-
+            
             Paragraph cliente = new Paragraph(new Paragraph("Cliente: " + datoscomprobante.getClienteComp(), fontNormal));
             cliente.setAlignment(Element.ALIGN_JUSTIFIED);
             document.add(cliente);
-
-            Paragraph dircliente = new Paragraph("Direccion: " + datosemp.getDireccionEmp(), fontNormal);
+            if ("FACTURA".equals(datoscomprobante.getTipoComp())) {
+                           Paragraph dircliente = new Paragraph("Direccion: " + datosemp.getDireccionEmp(), fontNormal);
             dircliente.setAlignment(Element.ALIGN_JUSTIFIED);
             document.add(dircliente);
 
             Paragraph nruc = new Paragraph("RUC: " + datoscomprobante.getDocclienteComp(), fontNormal);
             nruc.setAlignment(Element.ALIGN_JUSTIFIED);
             document.add(nruc);
+            } else{
+                Paragraph nruc = new Paragraph("DNI: " + datoscomprobante.getDocclienteComp(), fontNormal);
+            nruc.setAlignment(Element.ALIGN_JUSTIFIED);
+            document.add(nruc);
+            }
+ 
 
             document.add(new Paragraph(" "));
 
@@ -160,7 +166,7 @@ public class PDF {
             detalle.addCell(celdaUnidadDetalle);
 
             PdfPCell celdaProductoDetalle = new PdfPCell(new Paragraph(datosdetcomprobante.getDescripcionDcomp(), fontNormal));
-            celdaProductoDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
+            celdaProductoDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
             configurarBordes(celdaProductoDetalle, true, true, false, false);
             detalle.addCell(celdaProductoDetalle);
 
@@ -188,10 +194,10 @@ public class PDF {
             Paragraph totalg = new Paragraph("Total     S/  " + datoscomprobante.getImptotalComp(), fontNegrita);
             totalg.setAlignment(Element.ALIGN_RIGHT);
             document.add(totalg);
-            document.add(new Paragraph("______________________________"));
-            Paragraph montotexto = new Paragraph(convertir.Convertir(String.valueOf(datoscomprobante.getImptotalComp()), true), fontSubtitulo);
+            document.add(new Paragraph(" ______________________________"));
+            Paragraph montotexto = new Paragraph("SON:  "+convertir.Convertir(String.valueOf(datoscomprobante.getImptotalComp()), true), fontSubtitulo);
             document.add(montotexto);
-            document.add(new Paragraph(" "));
+            
             document.add(new Paragraph("TIPO DE PAGO: CONTADO", fontNegrita));
                 
             /*----*/
@@ -219,7 +225,7 @@ public class PDF {
             Paragraph thash = new Paragraph(datoscomprobante.getHashComp(), fontNormal);
             thash.setAlignment(Element.ALIGN_CENTER);
             document.add(thash);
-            
+            document.add(new Paragraph(" "));
             document.add(new Paragraph("Representación impresa de la factura electrónica generada desde el Sistema Facturador SUNAT, "
                     + "usted puede consultar con su CLAVE SOL.", fontNegrita));
             document.add(new Paragraph(" "));
