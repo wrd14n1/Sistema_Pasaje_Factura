@@ -76,6 +76,7 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem10 = new javax.swing.JMenuItem();
         menupasaje = new javax.swing.JMenu();
+        jMenuItem11 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         menusunat = new javax.swing.JMenu();
@@ -172,6 +173,15 @@ public class Principal extends javax.swing.JFrame {
         menupasaje.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/pasaje_menu.png"))); // NOI18N
         menupasaje.setText("Pasajes");
         menupasaje.setEnabled(false);
+
+        jMenuItem11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/conf_gen_menu.png"))); // NOI18N
+        jMenuItem11.setText("Programación Diaria");
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem11ActionPerformed(evt);
+            }
+        });
+        menupasaje.add(jMenuItem11);
 
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/pasaje_menu.png"))); // NOI18N
         jMenuItem1.setText("Generar Pasajes");
@@ -327,21 +337,28 @@ public class Principal extends javax.swing.JFrame {
         } catch (URISyntaxException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
-    */
-    
+     */
+
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-        Sunat.EjecutarSFS();
+        Thread thread = new Thread(() -> {
+            Sunat.EjecutarSFS();
+        });
+        thread.start();
+    
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
- 
+       
         Navegador vnav;
         try {
             vnav = new Navegador();
             centrarInternalFrame(vnav);
-        } catch (PropertyVetoException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }  
+
+} catch (PropertyVetoException ex) {
+            Logger.getLogger(Principal.class  
+
+.getName()).log(Level.SEVERE, null, ex);
+        }
 
 
     }//GEN-LAST:event_jMenuItem8ActionPerformed
@@ -394,6 +411,11 @@ public class Principal extends javax.swing.JFrame {
         e.printStackTrace();
     }
     }//GEN-LAST:event_jMenuItem10ActionPerformed
+
+    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+         ProgramacionDiaria lprograma = new ProgramacionDiaria();
+         centrarInternalFrame(lprograma);
+    }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     public void centrarInternalFrame(JInternalFrame internalFrame) {
 
@@ -452,22 +474,37 @@ public class Principal extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                }
+
+}
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Principal.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+} catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Principal.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+} catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Principal.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+} catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Principal.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         try {
             UIManager.setLookAndFeel(new FastLookAndFeel());
-        } catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+
+} catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(Principal.class  
+
+.getName()).log(Level.SEVERE, null, ex);
         }
         
         /* Create and display the form */
@@ -486,6 +523,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private static javax.swing.JMenuItem jMenuItem10;
+    private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;

@@ -91,7 +91,7 @@ public class VehiculoDAOImpl implements VehiculoDAO {
 
     @Override
     public void actualizarVehiculo(VehiculoModel vehiculo) {
-        String query = "UPDATE vehiculo SET desc_vehi = ?, placa_vehi = ?, numasie_vehi = ?, cond_vehi = ? WHERE id_vehi = ?";
+        String query = "UPDATE vehiculo SET desc_vehi = ?, placa_vehi = ?, numasie_vehi = ?, conductor_vehi = ? WHERE id_vehi = ?";
 
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setString(1, vehiculo.getDescVehi());

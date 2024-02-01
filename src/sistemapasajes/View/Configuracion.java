@@ -46,8 +46,11 @@ public class Configuracion extends javax.swing.JInternalFrame {
     public Configuracion() {
         initComponents();
         cargarDatosConfiguracion();
+        editartabla();
 
-        // Agregar el manejador de eventos de selección de la tabla
+    }
+    private void editartabla(){
+                // Agregar el manejador de eventos de selección de la tabla
         tabconfig.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 // Obtener el índice de la fila seleccionada

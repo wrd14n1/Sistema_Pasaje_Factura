@@ -91,7 +91,7 @@ public class Sunat {
         ConfiguracionModel configuracion = configdao.obtenerConfiguracionPorId(1);
          int resultado = 0;
         try {
-            ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "start", "EjecutarSFS.bat", configuracion.getRutaSunat() + "\\");
+            ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "start","/MIN", "EjecutarSFS.bat", configuracion.getRutaSunat() + "\\");
             builder.directory(new File(configuracion.getRutaSunat()));
 
             Process proceso = builder.start();

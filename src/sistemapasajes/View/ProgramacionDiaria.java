@@ -4,18 +4,100 @@
  */
 package sistemapasajes.View;
 
+import java.awt.event.ActionEvent;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import sistemapasajes.Funciones;
+import sistemapasajes.dao.RutaAsignadaDAO;
+import sistemapasajes.dao.RutaAsignadaDAOImpl;
+import sistemapasajes.dao.RutaDAO;
+import sistemapasajes.dao.RutaDAOImpl;
+import sistemapasajes.dao.VehiculoDAO;
+import sistemapasajes.dao.VehiculoDAOImpl;
+import sistemapasajes.modelo.AsignacionRutaModel;
+import sistemapasajes.modelo.RutaModel;
+import sistemapasajes.modelo.VehiculoModel;
+
 /**
  *
  * @author edson
  */
 public class ProgramacionDiaria extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form ProgramacionDiaria
-     */
-    
+    List<RutaModel> listarutas;
+
     public ProgramacionDiaria() {
         initComponents();
+        inicializarComboBoxRutas();
+        cargarFechaActual();
+        cargarDatosVehiculos();
+    }
+
+    private void inicializarComboBoxRutas() {
+        cbruta.removeAllItems();
+        RutaDAO rutadao = new RutaDAOImpl();
+        listarutas = rutadao.obtenerTodasRutas();
+        cbruta.addItem("Seleccionar");
+        for (int i = 0; i < listarutas.size(); i++) {
+            cbruta.addItem(listarutas.get(i).getTramoRuta());
+
+        }
+        // Agregar ActionListener que referencia a la función separada
+        cbruta.addActionListener(this::obtenerRuta);
+    }
+
+    private void cargarFechaActual() {
+        // Get the current date
+        Date currentDate = Calendar.getInstance().getTime();
+
+        // Set the current date to the JDateChooser
+        jDateChooser1.setDate(currentDate);
+    }
+    
+        private void obtenerRuta(ActionEvent e) {
+        // Obtener la ruta seleccionada
+        String rutaSeleccionada = (String) cbruta.getSelectedItem();
+
+        // Buscar la ruta en la lista
+        for (RutaModel ruta : listarutas) {
+            if (ruta.getTramoRuta().equals(rutaSeleccionada)) {
+                // Actualizar el precio en el JTextField
+                
+                txtorigen.setText(String.valueOf(ruta.getPunto1Ruta()));
+                txtdestino.setText(String.valueOf(ruta.getPunto2Ruta()));
+                break;  // No es necesario seguir buscando
+            }
+        }
+    }
+
+    private void cargarDatosVehiculos() {
+        DefaultTableModel modeloTabla = new DefaultTableModel();
+        modeloTabla.addColumn("ID");
+        modeloTabla.addColumn("Descripción");
+        modeloTabla.addColumn("Placa");
+        modeloTabla.addColumn("N° de Asientos");
+        modeloTabla.addColumn("Conductor");
+
+        VehiculoDAO vehidao = new VehiculoDAOImpl();
+        List<VehiculoModel> vehiculos = vehidao.obtenerTodosVehiculos();
+        for (VehiculoModel vehiculo : vehiculos) {
+            Object[] fila = {
+                vehiculo.getIdVehi(),
+                vehiculo.getDescVehi(),
+                vehiculo.getPlacaVehi(),
+                vehiculo.getNumVehi(),
+                vehiculo.getCondVehi()
+            };
+            modeloTabla.addRow(fila);
+        }
+        // Establecer el modo de autoajuste para que las columnas se adapten al contenido
+        tabvehi.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+        tabvehi.setModel(modeloTabla);
     }
 
     /**
@@ -28,22 +110,26 @@ public class ProgramacionDiaria extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbruta = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabvehi = new javax.swing.JTable();
+        btnguardar = new javax.swing.JButton();
+        txtorigen = new javax.swing.JTextField();
+        txtdestino = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
+        setTitle("Programación Diaria");
 
         jLabel1.setText("Ruta:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbruta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel2.setText("Fecha:");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabvehi.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -54,7 +140,25 @@ public class ProgramacionDiaria extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        tabvehi.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jScrollPane1.setViewportView(tabvehi);
+
+        btnguardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/guardar.png"))); // NOI18N
+        btnguardar.setText("Guardar");
+        btnguardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnguardarActionPerformed(evt);
+            }
+        });
+
+        txtorigen.setEnabled(false);
+        txtorigen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtorigenActionPerformed(evt);
+            }
+        });
+
+        txtdestino.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -62,17 +166,25 @@ public class ProgramacionDiaria extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 641, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 12, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addComponent(cbruta, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(txtorigen, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtdestino, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnguardar)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -82,23 +194,100 @@ public class ProgramacionDiaria extends javax.swing.JInternalFrame {
                     .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbruta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel2)))
-                .addGap(31, 31, 31)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnguardar)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtorigen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtdestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarActionPerformed
+
+        try {
+            // Obtener la ruta seleccionada del JComboBox
+            int rutaSeleccionada = cbruta.getSelectedIndex();
+            String descrutaSeleccionada = (String) cbruta.getSelectedItem();
+
+            // Obtener las filas seleccionadas de la tabla
+            int[] filasSeleccionadas = tabvehi.getSelectedRows();
+
+            // Verificar si se ha seleccionado alguna fila y ruta
+            if (filasSeleccionadas.length == 0 || "Seleccionar".equals(rutaSeleccionada)) {
+                JOptionPane.showMessageDialog(this, "Seleccione al menos una fila y una ruta.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Obtener la fecha y hora actual
+            Date fecha = jDateChooser1.getDate();
+            String fechaFormato = Funciones.convertirFecha(fecha);
+
+            Date hora = new Date();
+            SimpleDateFormat horaFormato = new SimpleDateFormat("HH:mm:ss");
+            String horaTexto = horaFormato.format(hora);
+
+            // Crear instancia de AsignacionRutaModel y establecer valores
+            RutaAsignadaDAO rutaAsignadaDao = new RutaAsignadaDAOImpl();
+
+            for (int filaSeleccionada : filasSeleccionadas) {
+                // Obtener el ID de asignación de ruta desde la tabla
+                int idvehiculo = Integer.parseInt(tabvehi.getValueAt(filaSeleccionada, 0).toString());
+
+                AsignacionRutaModel asignacionruta = new AsignacionRutaModel();
+                
+                asignacionruta.setFechaAsigRuta(fechaFormato);
+                asignacionruta.setHoraAsigRuta(horaTexto);
+                asignacionruta.setVehiculoAsigRuta(idvehiculo);
+                asignacionruta.setRutaAsigRuta(rutaSeleccionada);
+                asignacionruta.setOrigenAsigRuta(txtorigen.getText());
+                asignacionruta.setDestinoAsigRuta(txtdestino.getText());
+
+                //JOptionPane.showMessageDialog(this, "ID VEHICULO: " + idvehiculo + "- " + rutaSeleccionada, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+                // Guardar en la base de datos
+                rutaAsignadaDao.agregarRutaAsignada(asignacionruta);
+                
+            }
+
+            // Limpiar la selección en la tabla y el JComboBox
+            tabvehi.clearSelection();
+            cbruta.setSelectedIndex(0);
+
+            // Actualizar la tabla con los datos actualizados de la base de datos (si es necesario)
+            cargarDatosVehiculos();
+
+            //JOptionPane.showMessageDialog(this, "Datos guardados exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al guardar los datos. Consulta el registro de la aplicación para más detalles.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+
+    }//GEN-LAST:event_btnguardarActionPerformed
+
+    private void txtorigenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtorigenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtorigenActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton btnguardar;
+    private javax.swing.JComboBox<String> cbruta;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tabvehi;
+    private javax.swing.JTextField txtdestino;
+    private javax.swing.JTextField txtorigen;
     // End of variables declaration//GEN-END:variables
 }

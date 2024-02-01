@@ -6,7 +6,6 @@ package sistemapasajes.View;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -18,24 +17,17 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import sistemapasajes.ArchivosPlanos;
+import sistemapasajes.Funciones;
 
 import sistemapasajes.dao.ApiDAO;
 import sistemapasajes.dao.ApiDAOImpl;
@@ -49,12 +41,13 @@ import sistemapasajes.dao.EmpresaDAO;
 import sistemapasajes.dao.EmpresaDAOImpl;
 import sistemapasajes.dao.PasajeroDAO;
 import sistemapasajes.dao.PasajeroDAOimpl;
+import sistemapasajes.dao.RutaAsignadaDAO;
+import sistemapasajes.dao.RutaAsignadaDAOImpl;
 import sistemapasajes.dao.RutaDAO;
 import sistemapasajes.dao.RutaDAOImpl;
 import sistemapasajes.dao.SerieDAO;
 import sistemapasajes.dao.SerieDAOImpl;
-import sistemapasajes.dao.VehiculoDAO;
-import sistemapasajes.dao.VehiculoDAOImpl;
+import sistemapasajes.modelo.AsignacionRutaModel;
 import sistemapasajes.modelo.ComprobanteModel;
 import sistemapasajes.modelo.ConfiguracionModel;
 import sistemapasajes.modelo.DcomprobanteModel;
@@ -62,7 +55,6 @@ import sistemapasajes.modelo.EmpresaModel;
 import sistemapasajes.modelo.PasajeroModel;
 import sistemapasajes.modelo.RutaModel;
 import sistemapasajes.modelo.SerieModel;
-import sistemapasajes.modelo.VehiculoModel;
 
 /**
  *
@@ -90,8 +82,9 @@ public class Pasajes extends javax.swing.JInternalFrame {
      */
     public Pasajes() {
         initComponents();
+        cargarFechaActual();
         inicializarComboBoxRutas();
-        inicializarComboBoxVehiculos();
+        
 
         String rutalogo;
         //ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
@@ -221,6 +214,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
     private void actualizarPrecio(ActionEvent e) {
         // Obtener la ruta seleccionada
         String rutaSeleccionada = (String) cbruta.getSelectedItem();
+        int rutasel= cbruta.getSelectedIndex();
 
         // Buscar la ruta en la lista
         for (RutaModel ruta : listarutas) {
@@ -232,16 +226,38 @@ public class Pasajes extends javax.swing.JInternalFrame {
                 break;  // No es necesario seguir buscando
             }
         }
+        Date fecha = jDateChooser1.getDate();
+        String fechaformato = Funciones.convertirFecha(fecha);
+        JOptionPane.showMessageDialog(null, fechaformato);
+        inicializarComboBoxVehiculos(fechaformato, rutasel);
+    }
+    
+    private void cargarFechaActual() {
+        // Get the current date
+        Date currentDate = Calendar.getInstance().getTime();
+
+        // Set the current date to the JDateChooser
+        jDateChooser1.setDate(currentDate);
     }
 
-    private void inicializarComboBoxVehiculos() {
+    private void inicializarComboBoxVehiculos(String fecha, int ruta) {
+        
         cbvehiculo.removeAllItems();
-        VehiculoDAO vehiculodao = new VehiculoDAOImpl();
+        RutaAsignadaDAO rutaasignadadao = new RutaAsignadaDAOImpl();
+        // Date fecha = jDateChooser1.getDate();
+               // String fechaformato = Funciones.convertirFecha(fecha);
+        
+        List<AsignacionRutaModel> listavehiculos =rutaasignadadao.obtenerAsignacionRutasporFecha(fecha,ruta);
+         cbvehiculo.addItem("Seleccionar");
+        for (int i = 0; i < listavehiculos.size(); i++) {
+            cbvehiculo.addItem(listavehiculos.get(i).getVehiculoAsigRuta() + " - " + listavehiculos.get(i).getRutaAsigRuta());
+        }
+        /*VehiculoDAO vehiculodao = new VehiculoDAOImpl();
         List<VehiculoModel> listavehiculos = vehiculodao.obtenerTodosVehiculos();
         cbvehiculo.addItem("Seleccionar");
         for (int i = 0; i < listavehiculos.size(); i++) {
             cbvehiculo.addItem(listavehiculos.get(i).getPlacaVehi() + " - " + listavehiculos.get(i).getDescVehi());
-        }
+        } */
     }
 
     @SuppressWarnings("unchecked")
@@ -269,9 +285,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
         chkbfactura = new javax.swing.JCheckBox();
         jLabel10 = new javax.swing.JLabel();
         txtcomprobante = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
         txttipocomprobante = new javax.swing.JTextField();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         cbruta = new javax.swing.JComboBox<>();
@@ -285,6 +299,8 @@ public class Pasajes extends javax.swing.JInternalFrame {
         cbvehiculo = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
         btncambiar = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
         btncomprobante = new javax.swing.JButton();
 
         setClosable(true);
@@ -440,8 +456,6 @@ public class Pasajes extends javax.swing.JInternalFrame {
         txtcomprobante.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         txtcomprobante.setEnabled(false);
 
-        jLabel5.setText("Fecha de emisión:");
-
         txttipocomprobante.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         txttipocomprobante.setEnabled(false);
 
@@ -452,35 +466,23 @@ public class Pasajes extends javax.swing.JInternalFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(chkbfactura)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(chkbfactura)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtcomprobante, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(txttipocomprobante, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(txttipocomprobante, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(370, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
-                            .addComponent(txtcomprobante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txttipocomprobante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jLabel5))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(6, 6, 6)))
+                .addGap(12, 12, 12)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(txtcomprobante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txttipocomprobante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
                 .addComponent(chkbfactura))
         );
@@ -500,6 +502,11 @@ public class Pasajes extends javax.swing.JInternalFrame {
         jLabel7.setText("Precio: S/");
 
         txtorigen.setEnabled(false);
+        txtorigen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtorigenActionPerformed(evt);
+            }
+        });
 
         txtdestino.setEnabled(false);
 
@@ -517,6 +524,8 @@ public class Pasajes extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel5.setText("Fecha:");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -530,7 +539,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
                         .addComponent(jLabel8)
                         .addGap(18, 18, 18)
                         .addComponent(txtorigen, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 229, Short.MAX_VALUE)
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtdestino, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -540,8 +549,12 @@ public class Pasajes extends javax.swing.JInternalFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(cbruta, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cbruta, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(36, 36, 36)
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtprecio, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -556,12 +569,16 @@ public class Pasajes extends javax.swing.JInternalFrame {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(cbruta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7)
-                    .addComponent(txtprecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(cbruta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel7)
+                        .addComponent(txtprecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel6))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel5)
+                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
@@ -830,7 +847,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
                         + txtdestino.getText() + " PASAJERO: " + txtpasajero.getText();
 
                 Date fecha = jDateChooser1.getDate();
-                String fechaformato = convertirFecha(fecha);
+                String fechaformato = Funciones.convertirFecha(fecha);
 
                 Date hora = new Date();
                 SimpleDateFormat horaFormato = new SimpleDateFormat("HH:mm:ss");
@@ -843,8 +860,8 @@ public class Pasajes extends javax.swing.JInternalFrame {
                 Double igv = total * 0.18;
                 Double totalgrav = total - igv;
 
-                String fechaformato1 = convertirFecha(fecha);
-                String fechaformato2 = convertirFecha(fecha);
+                String fechaformato1 = Funciones.convertirFecha(fecha);
+                String fechaformato2 = Funciones.convertirFecha(fecha);
 
                 String estado = "XML NO GENERADO";
 
@@ -960,16 +977,10 @@ public class Pasajes extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnnempresaActionPerformed
 
-    private String convertirFecha(Date fecha) {
-        if (fecha != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            sdf.setTimeZone(TimeZone.getTimeZone("America/Lima"));
-            return sdf.format(fecha);
-        } else {
-            System.out.println("No se ha seleccionado ninguna fecha.");
-            return null;
-        }
-    }
+    private void txtorigenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtorigenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtorigenActionPerformed
+
 
     private void gestionarExcepcion(Exception ex) {
         System.out.println("Error: " + ex.getMessage());
