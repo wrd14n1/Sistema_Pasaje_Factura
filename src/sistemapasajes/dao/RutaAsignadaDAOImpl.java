@@ -96,7 +96,9 @@ public class RutaAsignadaDAOImpl implements RutaAsignadaDAO {
     @Override
     public List<AsignacionRutaModel> obtenerAsignacionRutasporFecha(String fechaAsignacionRuta, int rutaAsignacionRuta) {
         List<AsignacionRutaModel> rutasasignadas = new ArrayList<>();
-        String query = "SELECT * FROM asignacionruta WHERE fecha_asig = ? AND ruta_asig=?";
+        String query = "SELECT * FROM asignacionruta"
+                + " INNER JOIN vehiculo ON id_vehi=vehiculo_asig"
+                + " WHERE fecha_asig = ? AND ruta_asig=?";
 
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setString(1, fechaAsignacionRuta);
@@ -131,8 +133,10 @@ public class RutaAsignadaDAOImpl implements RutaAsignadaDAO {
         int rutaAsigRuta = rs.getInt("ruta_asig");
         String origenAsigRuta = rs.getString("origen_asig");
         String destinoAsigRuta = ("destino_asig");
+        String descVehiculoAsigRuta = rs.getString("desc_vehi");
+        String placavehiAsigRuta = rs.getString("placa_vehi");
 
-        return new AsignacionRutaModel(idRutaAsignada, fechaAsigRuta, horaAsigRuta, vehiculoAsigRuta, rutaAsigRuta, origenAsigRuta, destinoAsigRuta);
+        return new AsignacionRutaModel(idRutaAsignada, fechaAsigRuta, horaAsigRuta, vehiculoAsigRuta, rutaAsigRuta, origenAsigRuta, destinoAsigRuta, descVehiculoAsigRuta, placavehiAsigRuta);
     }
 
 }

@@ -13,9 +13,11 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import javax.swing.JOptionPane;
 import sistemapasajes.modelo.ComprobanteModel;
 import sistemapasajes.modelo.ConfiguracionModel;
@@ -43,7 +45,7 @@ public class PDF {
             // Especifica la ruta y el nombre del archivo PDF
             String nombrePDF = datoscomprobante.getSerieComp() + ".pdf";
             String rutaPDF = datosconfig.getRutaArchivo() + "\\" + nombrePDF;
-
+            String txtcomp = null;
             // Verifica si el archivo ya existe
             File archivoPDF = new File(rutaPDF);
             if (archivoPDF.exists()) {
@@ -53,6 +55,12 @@ public class PDF {
                     // Si el usuario no desea sobrescribir, termina la función
                     return;
                 }
+            }
+
+            if ("01".equals(datoscomprobante.getTipoComp())) {
+                txtcomp = "FACTURA";
+            } else if ("03".equals(datoscomprobante.getTipoComp())) {
+                txtcomp = "BOLETA";
             }
 
             Document document = new Document(new Rectangle(anchoPuntos, altoPuntos), margenIzquierdo, margenDerecho, margenSuperior, margenInferior);
@@ -70,7 +78,7 @@ public class PDF {
             Font fontSubtitulo = new Font(Font.FontFamily.HELVETICA, 8, Font.BOLDITALIC);
             Font fontNegrita = new Font(Font.FontFamily.HELVETICA, 7, Font.BOLD);
             Font fontNormal = new Font(Font.FontFamily.HELVETICA, 7);
-                Font fontTerminos = new Font(Font.FontFamily.HELVETICA, 6,Font.BOLD);
+            Font fontTerminos = new Font(Font.FontFamily.HELVETICA, 6, Font.BOLD);
 
             // Agrega contenido al PDF
             Paragraph titulo = new Paragraph(datosconfig.getRazonConf(), fontTitulo);
@@ -94,7 +102,7 @@ public class PDF {
             PdfPTable tabla = new PdfPTable(1);
             tabla.setWidthPercentage(100);
             PdfPCell celda = new PdfPCell(new Paragraph(datosconfig.getRucConf() + "\n"
-                    + datoscomprobante.getTipoComp() + " ELECTRONICA" + "\n"
+                    + txtcomp + " ELECTRONICA" + "\n"
                     + datoscomprobante.getSerieComp(), fontTitulo));
             celda.setBorder(Rectangle.BOX);
             celda.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -104,24 +112,23 @@ public class PDF {
             Paragraph fecha = new Paragraph(datoscomprobante.getFechaComp() + "   " + datoscomprobante.getHoraComp(), fontNormal);
             fecha.setAlignment(Element.ALIGN_LEFT);
             document.add(fecha);
-            
+
             Paragraph cliente = new Paragraph(new Paragraph("Cliente: " + datoscomprobante.getClienteComp(), fontNormal));
             cliente.setAlignment(Element.ALIGN_JUSTIFIED);
             document.add(cliente);
-            if ("FACTURA".equals(datoscomprobante.getTipoComp())) {
-                           Paragraph dircliente = new Paragraph("Direccion: " + datosemp.getDireccionEmp(), fontNormal);
-            dircliente.setAlignment(Element.ALIGN_JUSTIFIED);
-            document.add(dircliente);
+            if ("01".equals(datoscomprobante.getTipoComp())) {
+                Paragraph dircliente = new Paragraph("Direccion: " + datosemp.getDireccionEmp(), fontNormal);
+                dircliente.setAlignment(Element.ALIGN_JUSTIFIED);
+                document.add(dircliente);
 
-            Paragraph nruc = new Paragraph("RUC: " + datoscomprobante.getDocclienteComp(), fontNormal);
-            nruc.setAlignment(Element.ALIGN_JUSTIFIED);
-            document.add(nruc);
-            } else{
+                Paragraph nruc = new Paragraph("RUC: " + datoscomprobante.getDocclienteComp(), fontNormal);
+                nruc.setAlignment(Element.ALIGN_JUSTIFIED);
+                document.add(nruc);
+            } else {
                 Paragraph nruc = new Paragraph("DNI: " + datoscomprobante.getDocclienteComp(), fontNormal);
-            nruc.setAlignment(Element.ALIGN_JUSTIFIED);
-            document.add(nruc);
+                nruc.setAlignment(Element.ALIGN_JUSTIFIED);
+                document.add(nruc);
             }
- 
 
             document.add(new Paragraph(" "));
 
@@ -182,30 +189,46 @@ public class PDF {
 
             document.add(detalle);
 
-            Paragraph subtotalg = new Paragraph("Sub Total  S/  " + datoscomprobante.getTotalventgravComp(), fontNormal);
-            subtotalg.setAlignment(Element.ALIGN_RIGHT);
-            document.add(subtotalg);
-            /*Paragraph afectog = new Paragraph("Afecto   S/  0.00",fontNormal);
+            if ("AFECTO".equals(datoscomprobante.getAfecComp())) {
+                Paragraph subtotalg = new Paragraph("Sub Total  S/  " + datoscomprobante.getTotalventgravComp(), fontNormal);
+                subtotalg.setAlignment(Element.ALIGN_RIGHT);
+                document.add(subtotalg);
+                /*Paragraph afectog = new Paragraph("Afecto   S/  0.00",fontNormal);
             afectog.setAlignment(Element.ALIGN_RIGHT);
             document.add(afectog); */
-            Paragraph igvg = new Paragraph("IGV (18%)      S/ " + datoscomprobante.getIgvComp(), fontNormal);
-            igvg.setAlignment(Element.ALIGN_RIGHT);
-            document.add(igvg);
-            Paragraph totalg = new Paragraph("Total     S/  " + datoscomprobante.getImptotalComp(), fontNegrita);
-            totalg.setAlignment(Element.ALIGN_RIGHT);
-            document.add(totalg);
+                Paragraph igvg = new Paragraph("IGV (18%)      S/ " + datoscomprobante.getIgvComp(), fontNormal);
+                igvg.setAlignment(Element.ALIGN_RIGHT);
+                document.add(igvg);
+                Paragraph totalg = new Paragraph("Total     S/  " + datoscomprobante.getImptotalComp(), fontNegrita);
+                totalg.setAlignment(Element.ALIGN_RIGHT);
+                document.add(totalg);
+            } else if ("EXONERADO".equals(datoscomprobante.getAfecComp())) {
+                Paragraph subtotalg = new Paragraph("Sub Total  S/  0.00", fontNormal);
+                subtotalg.setAlignment(Element.ALIGN_RIGHT);
+                document.add(subtotalg);
+                Paragraph afectog = new Paragraph("Exonerado   S/  " + datoscomprobante.getImptotalComp(), fontNormal);
+                afectog.setAlignment(Element.ALIGN_RIGHT);
+                document.add(afectog);
+                Paragraph igvg = new Paragraph("IGV (18%)      S/   0.00", fontNormal);
+                igvg.setAlignment(Element.ALIGN_RIGHT);
+                document.add(igvg);
+                Paragraph totalg = new Paragraph("Total     S/  " + datoscomprobante.getImptotalComp(), fontNegrita);
+                totalg.setAlignment(Element.ALIGN_RIGHT);
+                document.add(totalg);
+            }
+
             document.add(new Paragraph(" ______________________________"));
-            Paragraph montotexto = new Paragraph("SON:  "+convertir.Convertir(String.valueOf(datoscomprobante.getImptotalComp()), true), fontSubtitulo);
+            Paragraph montotexto = new Paragraph("SON:  " + convertir.Convertir(String.valueOf(datoscomprobante.getImptotalComp()), true), fontSubtitulo);
             document.add(montotexto);
-            
+
             document.add(new Paragraph("TIPO DE PAGO: CONTADO", fontNegrita));
-                
+
             /*----*/
             // Obtén la instancia de la imagen QR
             Image imagenqr2 = Image.getInstance(rutaqr);
 
             // Calcula el nuevo ancho y alto de la imagen reducida al 50%
-            float nuevoAncho2 = (anchoPuntos - margenIzquierdo - margenDerecho) ;
+            float nuevoAncho2 = (anchoPuntos - margenIzquierdo - margenDerecho);
             float nuevoAlto2 = imagenqr2.getHeight() * (nuevoAncho2 / imagenqr2.getWidth());
 
             // Escala la imagen a las nuevas dimensiones
@@ -230,15 +253,38 @@ public class PDF {
                     + "usted puede consultar con su CLAVE SOL.", fontNegrita));
             document.add(new Paragraph(" "));
             document.add(new Paragraph("Gracias por su prefencia.", fontNegrita));
-            
 
             Paragraph texto3 = new Paragraph(datosconfig.getTxt3Conf(), fontTerminos);
             texto3.setAlignment(Element.ALIGN_JUSTIFIED);
             document.add(texto3);
 
+            document.newPage();
+            document.setPageSize(new Rectangle(anchoPuntos, 50));
+
+            // Agregar contenido en la nueva página
+            Paragraph nuevoContenido = new Paragraph("Contenido en la nueva página", fontNegrita);
+            document.add(nuevoContenido);
+
             document.close();
             System.out.println("PDF creado exitosamente: " + rutaPDF);
             JOptionPane.showMessageDialog(null, "PDF Creado Satisfactoriamente", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+
+            // Abrir el documento PDF con el visor predeterminado
+            try {
+                File pdfFile = new File(rutaPDF);
+                if (pdfFile.exists()) {
+                    if (Desktop.isDesktopSupported()) {
+                        Desktop.getDesktop().open(pdfFile);
+                    } else {
+                        System.out.println("La apertura del archivo no es compatible con el entorno de escritorio actual.");
+                    }
+                } else {
+                    System.out.println("El archivo PDF no se encuentra en la ruta especificada.");
+                }
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Error al abrir el PDF: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al crear el PDF: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

@@ -118,6 +118,8 @@ public class SerieDAOImpl implements SerieDAO {
 
         } catch (SQLException ex) {
             System.out.println("Error al actualizar registro: " + ex.getMessage());
+             JOptionPane.showMessageDialog(null, "Error al actualizar registro: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+
         }
     }
 

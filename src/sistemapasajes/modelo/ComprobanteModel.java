@@ -11,6 +11,7 @@ import java.util.Date;
  * @author edson
  */
 public class ComprobanteModel {
+
     private int idComp;
     private String tipoComp;
     private String serieComp;
@@ -28,32 +29,34 @@ public class ComprobanteModel {
     private String fechaenvioComp;
     private String estadoComp;
     private String afecComp;
-    
-    public ComprobanteModel(){
-        
+    private int vehiculoComp;
+
+    public ComprobanteModel() {
+
     }
-    
+
     public ComprobanteModel(int idComp, String tipoComp, String serieComp, String docclienteComp, String clienteComp, String fechaComp,
-            String horaComp,String monedaComp, String mediopagoComp, Double totalventagravComp, Double igvComp, Double imptotalComp,
-            String hashComp,String fechaxmlComp, String fechaenvioComp, String estadoComp, String afecComp){
-        this.idComp=idComp;
-        this.tipoComp=tipoComp;
-        this.serieComp=serieComp;
-        this.docclienteComp=docclienteComp;
-        this.clienteComp=clienteComp;
-        this.fechaComp=fechaComp;
-        this.horaComp=horaComp;
-        this.monedaComp=monedaComp;
-        this.mediopagoComp=mediopagoComp;
-        this.totalventgravComp=totalventagravComp;
-        this.igvComp=igvComp;
-        this.imptotalComp=imptotalComp;
-        this.hashComp=hashComp;
-        this.fechaxmlComp=fechaxmlComp;
-        this.fechaenvioComp=fechaenvioComp;
+            String horaComp, String monedaComp, String mediopagoComp, Double totalventagravComp, Double igvComp, Double imptotalComp,
+            String hashComp, String fechaxmlComp, String fechaenvioComp, String estadoComp, String afecComp, int vehiculoComp) {
+        this.idComp = idComp;
+        this.tipoComp = tipoComp;
+        this.serieComp = serieComp;
+        this.docclienteComp = docclienteComp;
+        this.clienteComp = clienteComp;
+        this.fechaComp = fechaComp;
+        this.horaComp = horaComp;
+        this.monedaComp = monedaComp;
+        this.mediopagoComp = mediopagoComp;
+        this.totalventgravComp = totalventagravComp;
+        this.igvComp = igvComp;
+        this.imptotalComp = imptotalComp;
+        this.hashComp = hashComp;
+        this.fechaxmlComp = fechaxmlComp;
+        this.fechaenvioComp = fechaenvioComp;
         this.estadoComp = estadoComp;
-        this.afecComp=afecComp;
-        
+        this.afecComp = afecComp;
+        this.vehiculoComp=vehiculoComp;
+
     }
 
     public int getIdComp() {
@@ -191,6 +194,13 @@ public class ComprobanteModel {
     public void setAfecComp(String afecComp) {
         this.afecComp = afecComp;
     }
-    
-    
+
+    public int getVehiculoComp() {
+        return vehiculoComp;
+    }
+
+    public void setVehiculoComp(int vehiculoComp) {
+        this.vehiculoComp = vehiculoComp;
+    }
+
 }

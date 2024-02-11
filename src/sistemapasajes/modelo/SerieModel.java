@@ -14,6 +14,8 @@ public class SerieModel {
     private String codsunatSerie;
     private String codSerie;
     private int numSerie;
+    private int estadoSerie;
+    private String asignadoSerie;
     
     public SerieModel(){
         

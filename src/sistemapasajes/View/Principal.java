@@ -4,32 +4,31 @@
  */
 package sistemapasajes.View;
 
-import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
-import com.jtattoo.plaf.acryl.AcrylLookAndFeel;
 import com.jtattoo.plaf.fast.FastLookAndFeel;
-import java.awt.Graphics;
-import java.awt.Image;
 import java.beans.PropertyVetoException;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URISyntaxException;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import sistemapasajes.ProcessOutputReader;
 import sistemapasajes.Sunat;
+import sistemapasajes.dao.ComprobanteDAO;
+import sistemapasajes.dao.ComprobanteDAOImpl;
 import sistemapasajes.dao.ConfiguracionDAO;
 import sistemapasajes.dao.ConfiguracionDAOImpl;
+import sistemapasajes.dao.RutaArchivoDAO;
+import sistemapasajes.dao.RutaArchivoDAOImpl;
+import sistemapasajes.modelo.ComprobanteModel;
 import sistemapasajes.modelo.ConfiguracionModel;
+import sistemapasajes.modelo.RutaArchivoModel;
 
 /**
  *
@@ -37,6 +36,9 @@ import sistemapasajes.modelo.ConfiguracionModel;
  */
 public class Principal extends javax.swing.JFrame {
 
+       
+
+ 
     /**
      * Creates new form Principal
      */
@@ -51,8 +53,10 @@ public class Principal extends javax.swing.JFrame {
         }
         // Inicia maximizado
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
 
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -67,7 +71,7 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem9 = new javax.swing.JMenuItem();
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        menulogin = new javax.swing.JMenu();
         menuitemingresar = new javax.swing.JMenuItem();
         menuconf = new javax.swing.JMenu();
         opconfig = new javax.swing.JMenuItem();
@@ -79,9 +83,13 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem11 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
         menusunat = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem12 = new javax.swing.JMenuItem();
+        jMenuItem13 = new javax.swing.JMenuItem();
 
         jMenuItem4.setText("jMenuItem4");
 
@@ -105,8 +113,8 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuBar1.setEnabled(false);
 
-        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/ingresar_menu.png"))); // NOI18N
-        jMenu1.setText("Ingresar");
+        menulogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/ingresar_menu.png"))); // NOI18N
+        menulogin.setText("Ingresar");
 
         menuitemingresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/ingresar_menu.png"))); // NOI18N
         menuitemingresar.setText("Ingresar");
@@ -115,9 +123,9 @@ public class Principal extends javax.swing.JFrame {
                 menuitemingresarActionPerformed(evt);
             }
         });
-        jMenu1.add(menuitemingresar);
+        menulogin.add(menuitemingresar);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(menulogin);
 
         menuconf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/conf_menu.png"))); // NOI18N
         menuconf.setText("Configuración");
@@ -203,6 +211,9 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuBar1.add(menupasaje);
 
+        jMenu2.setText("Encomiendas");
+        jMenuBar1.add(jMenu2);
+
         menusunat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/sunat_menu.png"))); // NOI18N
         menusunat.setText("Facturador");
         menusunat.setEnabled(false);
@@ -226,6 +237,21 @@ public class Principal extends javax.swing.JFrame {
         menusunat.add(jMenuItem8);
 
         jMenuBar1.add(menusunat);
+
+        jMenu3.setText("Reportes");
+
+        jMenuItem12.setText("Reporte de Pasajes");
+        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem12ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem12);
+
+        jMenuItem13.setText("Reporte de Encomiendas");
+        jMenu3.add(jMenuItem13);
+
+        jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
 
@@ -344,27 +370,27 @@ public class Principal extends javax.swing.JFrame {
             Sunat.EjecutarSFS();
         });
         thread.start();
-    
+
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
-       
+
         Navegador vnav;
         try {
             vnav = new Navegador();
             centrarInternalFrame(vnav);
 
-} catch (PropertyVetoException ex) {
-            Logger.getLogger(Principal.class  
-
-.getName()).log(Level.SEVERE, null, ex);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(Principal.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
+        
 
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        Lpasajes vlpje = new Lpasajes();
+        Lpasajesxml vlpje = new Lpasajesxml();
 
         centrarInternalFrame(vlpje);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
@@ -375,47 +401,51 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_menuitemingresarActionPerformed
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
-                                              
-    // Código para realizar la copia de seguridad de la base de datos
-    ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
-            ConfiguracionModel configuracion = configdao.obtenerConfiguracionPorId(1);
-            String rutaBackup = configuracion.getRutaArchivo();
-            
-    String dbName = "bd_pasaje";
-    String dbUser = "root";
-    String dbPass = "020320";
-    String filePath = rutaBackup+"\\backup.sql";
 
-    try {
-        // Construir el comando para mysqldump
-        String[] command = {"mysqldump", "-u" + dbUser, "-p" + dbPass, dbName};
+        // Código para realizar la copia de seguridad de la base de datos
+        ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
+        ConfiguracionModel configuracion = configdao.obtenerConfiguracionPorId(1);
+        String rutaBackup = configuracion.getRutaArchivo();
 
-        // Ejecutar el comando
-        ProcessBuilder processBuilder = new ProcessBuilder(command);
-        Process process = processBuilder.start();
+        String dbName = "bd_pasaje";
+        String dbUser = "root";
+        String dbPass = "020320";
+        String filePath = rutaBackup + "\\backup.sql";
 
-        // Obtener el flujo de salida del proceso
-        ProcessOutputReader outputReader = new ProcessOutputReader(process.getInputStream());
-        new Thread(outputReader).start();
+        try {
+            // Construir el comando para mysqldump
+            String[] command = {"mysqldump", "-u" + dbUser, "-p" + dbPass, dbName};
 
-        // Esperar a que el proceso termine
-        int exitCode = process.waitFor();
+            // Ejecutar el comando
+            ProcessBuilder processBuilder = new ProcessBuilder(command);
+            Process process = processBuilder.start();
 
-        // Verificar el código de salida
-        if (exitCode == 0) {
-            System.out.println("Copia de seguridad completada con éxito. Guardada en: " + filePath);
-        } else {
-            System.out.println("Error al realizar la copia de seguridad. Código de salida: " + exitCode);
+            // Obtener el flujo de salida del proceso
+            ProcessOutputReader outputReader = new ProcessOutputReader(process.getInputStream());
+            new Thread(outputReader).start();
+
+            // Esperar a que el proceso termine
+            int exitCode = process.waitFor();
+
+            // Verificar el código de salida
+            if (exitCode == 0) {
+                System.out.println("Copia de seguridad completada con éxito. Guardada en: " + filePath);
+            } else {
+                System.out.println("Error al realizar la copia de seguridad. Código de salida: " + exitCode);
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
-    } catch (IOException | InterruptedException e) {
-        e.printStackTrace();
-    }
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
-         ProgramacionDiaria lprograma = new ProgramacionDiaria();
-         centrarInternalFrame(lprograma);
+        ProgramacionDiaria lprograma = new ProgramacionDiaria();
+        centrarInternalFrame(lprograma);
     }//GEN-LAST:event_jMenuItem11ActionPerformed
+
+    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     public void centrarInternalFrame(JInternalFrame internalFrame) {
 
@@ -460,9 +490,6 @@ public class Principal extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    
-  
-    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -475,55 +502,52 @@ public class Principal extends javax.swing.JFrame {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
 
-}
+                }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Principal.class  
+            java.util.logging.Logger.getLogger(Principal.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Principal.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-} catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Principal.class  
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Principal.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-} catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Principal.class  
-
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Principal.class  
-
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Principal.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         try {
             UIManager.setLookAndFeel(new FastLookAndFeel());
 
-} catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(Principal.class  
-
-.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(Principal.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Principal().setVisible(true);
-                
-     
+
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JDesktopPane jDesktopPane1;
-    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private static javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem11;
+    private javax.swing.JMenuItem jMenuItem12;
+    private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
@@ -534,6 +558,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem9;
     public javax.swing.JMenu menuconf;
     private javax.swing.JMenuItem menuitemingresar;
+    public javax.swing.JMenu menulogin;
     public javax.swing.JMenu menupasaje;
     public javax.swing.JMenu menusunat;
     private javax.swing.JMenuItem opconfig;

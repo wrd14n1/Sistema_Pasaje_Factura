@@ -3,11 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/edson/NetBeansProjects/SistemaPasajes/src/sistemapasajes/modelo/ComprobanteModel.java</file>
-            <file>file:/home/edson/NetBeansProjects/SistemaPasajes/src/sistemapasajes/modelo/AsignacionRutaModel.java</file>
-            <file>file:/home/edson/NetBeansProjects/SistemaPasajes/src/sistemapasajes/View/Pasajes.java</file>
-            <file>file:/home/edson/NetBeansProjects/SistemaPasajes/src/sistemapasajes/View/ProgramacionDiaria.java</file>
-            <file>file:/home/edson/NetBeansProjects/SistemaPasajes/src/sistemapasajes/View/Vehiculo.java</file>
+            <file>file:/home/edson/NetBeansProjects/SistemaPasajes/src/sistemapasajes/dao/ComprobanteDAOImpl.java</file>
+            <file>file:/home/edson/NetBeansProjects/SistemaPasajes/src/sistemapasajes/View/Lpasajes.java</file>
+            <file>file:/home/edson/NetBeansProjects/SistemaPasajes/src/sistemapasajes/Sunat.java</file>
         </group>
     </open-files>
 </project-private>

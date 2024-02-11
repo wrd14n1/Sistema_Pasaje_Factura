@@ -130,6 +130,7 @@ public class Login extends javax.swing.JInternalFrame {
             principal.menuconf.setEnabled(true);
             principal.menupasaje.setEnabled(true);
             principal.menusunat.setEnabled(true);
+            principal.menulogin.setEnabled(false);
 
             this.setVisible(false);
               JOptionPane.showMessageDialog(null, "Acceso Correcto, Bienvenido "  + usuariolog.getDatosUsua(), "Hola", JOptionPane.INFORMATION_MESSAGE);

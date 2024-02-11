@@ -16,17 +16,22 @@ public class AsignacionRutaModel {
     private int rutaAsigRuta;
     private String origenAsigRuta;
     private String destinoAsigRuta;
+    private String descVehiculoAsigRuta;
+    private String placavehiAsigRuta;
+    //public String getDescVehiculoAsigRuta;
     
     public AsignacionRutaModel(){
         
     }
     public AsignacionRutaModel( int idAsigRuta, String fechaAsigRuta, String horaAsigRuta, int vehiculoAsigRuta, int rutaAsigRuta,
-            String origenAsigRuta, String destinoAsigRuta ){
+            String origenAsigRuta, String destinoAsigRuta, String descVehiculoAsigRuta, String placavehiAsigRuta ){
         this.idAsigRuta=idAsigRuta;
         this.fechaAsigRuta = fechaAsigRuta;
         this.horaAsigRuta=horaAsigRuta;
         this.vehiculoAsigRuta=vehiculoAsigRuta;
-        this.rutaAsigRuta=rutaAsigRuta;        
+        this.rutaAsigRuta=rutaAsigRuta;    
+        this.descVehiculoAsigRuta= descVehiculoAsigRuta;
+        this.placavehiAsigRuta = placavehiAsigRuta;
     }
 
     public int getIdAsigRuta() {
@@ -83,6 +88,22 @@ public class AsignacionRutaModel {
 
     public void setDestinoAsigRuta(String destinoAsigRuta) {
         this.destinoAsigRuta = destinoAsigRuta;
+    }
+
+    public String getDescVehiculoAsigRuta() {
+        return descVehiculoAsigRuta;
+    }
+
+    public void setDescVehiculoAsigRuta(String descVehiculoAsigRuta) {
+        this.descVehiculoAsigRuta = descVehiculoAsigRuta;
+    }
+
+    public String getPlacavehiAsigRuta() {
+        return placavehiAsigRuta;
+    }
+
+    public void setPlacavehiAsigRuta(String placavehiAsigRuta) {
+        this.placavehiAsigRuta = placavehiAsigRuta;
     }
     
 }

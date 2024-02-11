@@ -128,8 +128,8 @@ public class ComprobanteDAOImpl implements ComprobanteDAO {
     public void agregarComprobante(ComprobanteModel comprobante) {
         String query = "INSERT INTO comprobante (tipo_comp, serie_comp, doccliente_comp,cliente_comp, fecha_comp,"
                 + "moneda_comp, mediopago_comp, totalventgrav_comp, igv_comp, imptotal_comp,"
-                + "fechaxml_comp, fechaenvio_comp, estado_comp, hora_comp, afec_comp) "
-                + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "fechaxml_comp, fechaenvio_comp, estado_comp, hora_comp, afec_comp, vehiculo_comp) "
+                + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try (PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setString(1, comprobante.getTipoComp());
             stmt.setString(2, comprobante.getSerieComp());
@@ -146,6 +146,7 @@ public class ComprobanteDAOImpl implements ComprobanteDAO {
             stmt.setString(13, comprobante.getEstadoComp());
             stmt.setString(14, comprobante.getHoraComp());
             stmt.setString(15, comprobante.getAfecComp());
+            stmt.setInt(16, comprobante.getVehiculoComp());
 
             stmt.executeUpdate();
             JOptionPane.showMessageDialog(null, "Comprobante agregado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
@@ -191,8 +192,9 @@ public class ComprobanteDAOImpl implements ComprobanteDAO {
         String fechaenvioComp = rs.getString("fechaenvio_comp");
         String estadoComp = rs.getString("estado_comp");
         String afecComp = rs.getString("afec_comp");
+        int vehiComp = rs.getInt("vehiculo_comp");
         return new ComprobanteModel(idComp, tipoComp, serieComp, docclienteComp, clienteComp, fechaComp, horaComp, monedaComp,
-                mediopagoComp, totalventgravComp, igvComp, imptotalComp, hashComp, fechaxmlComp, fechaenvioComp, estadoComp, afecComp);
+                mediopagoComp, totalventgravComp, igvComp, imptotalComp, hashComp, fechaxmlComp, fechaenvioComp, estadoComp, afecComp, vehiComp);
     }
 
     @Override

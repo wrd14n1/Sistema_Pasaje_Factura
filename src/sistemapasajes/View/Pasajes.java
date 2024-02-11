@@ -9,6 +9,8 @@ import com.google.gson.JsonElement;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -66,17 +68,18 @@ public class Pasajes extends javax.swing.JInternalFrame {
     int numero;
     String numserie;
     String codserie;
+    String codsunatserie;
     String rutasunat;
     String rucempresa;
     String tipocompsunat;
     String tipdoccli;
     ConfiguracionDAO configuraciondao = new ConfiguracionDAOImpl();
     ConfiguracionModel configuracion = new ConfiguracionModel();
-     String json;
+    String json;
     ApiDAO apidao = new ApiDAOImpl();
-    
-    //String rjson = null;
+      String tiposerie;
 
+    //String rjson = null;
     /**
      * Creates new form Pasajes
      */
@@ -84,7 +87,6 @@ public class Pasajes extends javax.swing.JInternalFrame {
         initComponents();
         cargarFechaActual();
         inicializarComboBoxRutas();
-        
 
         String rutalogo;
         //ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
@@ -109,7 +111,6 @@ public class Pasajes extends javax.swing.JInternalFrame {
     }
     // Método para cargar y mostrar la imagen en el JLabel
 
-        
     public String realizarConsultaApi(String apiUrl) throws IOException {
         int intentosMaximos = 5;
         int intentoActual = 0;
@@ -133,7 +134,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
                     return json;
                 } finally {
                     // Asegúrate de cerrar la conexión
-                    
+
                     connection.disconnect();
                 }
             } catch (IOException ex) {
@@ -168,7 +169,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
             Thread.currentThread().interrupt();
         }
     }
-    
+
     public void mostrarImagen(String rutaImagen) {
         try {
             // Lee la imagen desde el archivo
@@ -214,7 +215,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
     private void actualizarPrecio(ActionEvent e) {
         // Obtener la ruta seleccionada
         String rutaSeleccionada = (String) cbruta.getSelectedItem();
-        int rutasel= cbruta.getSelectedIndex();
+        int rutasel = cbruta.getSelectedIndex();
 
         // Buscar la ruta en la lista
         for (RutaModel ruta : listarutas) {
@@ -228,10 +229,10 @@ public class Pasajes extends javax.swing.JInternalFrame {
         }
         Date fecha = jDateChooser1.getDate();
         String fechaformato = Funciones.convertirFecha(fecha);
-        JOptionPane.showMessageDialog(null, fechaformato);
+
         inicializarComboBoxVehiculos(fechaformato, rutasel);
     }
-    
+
     private void cargarFechaActual() {
         // Get the current date
         Date currentDate = Calendar.getInstance().getTime();
@@ -241,25 +242,45 @@ public class Pasajes extends javax.swing.JInternalFrame {
     }
 
     private void inicializarComboBoxVehiculos(String fecha, int ruta) {
-        
+
         cbvehiculo.removeAllItems();
         RutaAsignadaDAO rutaasignadadao = new RutaAsignadaDAOImpl();
         // Date fecha = jDateChooser1.getDate();
-               // String fechaformato = Funciones.convertirFecha(fecha);
-        
-        List<AsignacionRutaModel> listavehiculos =rutaasignadadao.obtenerAsignacionRutasporFecha(fecha,ruta);
-         cbvehiculo.addItem("Seleccionar");
+        // String fechaformato = Funciones.convertirFecha(fecha);
+
+        List<AsignacionRutaModel> listavehiculos = rutaasignadadao.obtenerAsignacionRutasporFecha(fecha, ruta);
+        cbvehiculo.addItem("Seleccionar");
         for (int i = 0; i < listavehiculos.size(); i++) {
-            cbvehiculo.addItem(listavehiculos.get(i).getVehiculoAsigRuta() + " - " + listavehiculos.get(i).getRutaAsigRuta());
+            cbvehiculo.addItem(listavehiculos.get(i).getPlacavehiAsigRuta() + " - " + listavehiculos.get(i).getDescVehiculoAsigRuta());
+
         }
-        /*VehiculoDAO vehiculodao = new VehiculoDAOImpl();
+        // Agregar un ItemListener al JComboBox
+        cbvehiculo.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    // Obtener el índice seleccionado
+                    int selectedIndex = cbvehiculo.getSelectedIndex();
+
+                    // Si no es el índice "Seleccionar", obtener el id_vehi y establecerlo en el JTextField
+                    if (selectedIndex > 0) {
+                        int idVehiculo = listavehiculos.get(selectedIndex - 1).getVehiculoAsigRuta();
+                        txtvehiculo.setText(String.valueOf(idVehiculo));
+                    } else {
+                        // Si es el índice "Seleccionar", limpiar el JTextField
+                        txtvehiculo.setText("");
+                    }
+                }
+            }
+        });
+    }
+
+    /*VehiculoDAO vehiculodao = new VehiculoDAOImpl();
         List<VehiculoModel> listavehiculos = vehiculodao.obtenerTodosVehiculos();
         cbvehiculo.addItem("Seleccionar");
         for (int i = 0; i < listavehiculos.size(); i++) {
             cbvehiculo.addItem(listavehiculos.get(i).getPlacaVehi() + " - " + listavehiculos.get(i).getDescVehi());
         } */
-    }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -301,6 +322,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
         btncambiar = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        txtvehiculo = new javax.swing.JTextField();
         btncomprobante = new javax.swing.JButton();
 
         setClosable(true);
@@ -536,17 +558,6 @@ public class Pasajes extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtorigen, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 229, Short.MAX_VALUE)
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtdestino, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btncambiar)
-                        .addGap(58, 58, 58))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(cbruta, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -562,9 +573,24 @@ public class Pasajes extends javax.swing.JInternalFrame {
                                 .addComponent(jLabel6))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cbvehiculo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addContainerGap())))
+                                .addGap(713, 713, 713)
+                                .addComponent(txtvehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cbvehiculo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtorigen, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 229, Short.MAX_VALUE)
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtdestino, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(btncambiar)
+                        .addGap(58, 58, 58))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -589,7 +615,8 @@ public class Pasajes extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(cbvehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbvehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtvehiculo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 7, Short.MAX_VALUE))
         );
 
@@ -720,13 +747,14 @@ public class Pasajes extends javax.swing.JInternalFrame {
         SerieDAO seriedao = new SerieDAOImpl();
         SerieModel serie;
 
-        String tiposerie;
+      
 
         if (chkbfactura.isSelected()) {
             serie = seriedao.obtenerTipoSerie("FACTURA", "F001");
             numero = serie.getNumSerie() + 1;
             codserie = serie.getCodSerie();
             numserie = codserie + "-" + numero;
+            codsunatserie=serie.getCodsunatSerie();
             tiposerie = serie.getTipoSerie();
             System.out.println("holis");
             pnlfactura.setEnabled(true);
@@ -738,6 +766,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
             numero = serie.getNumSerie() + 1;
             codserie = serie.getCodSerie();
             numserie = codserie + "-" + numero;
+             codsunatserie=serie.getCodsunatSerie();
             tiposerie = serie.getTipoSerie();
             System.out.println("adios");
             pnlfactura.setEnabled(false);
@@ -773,7 +802,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
                 //CONSULTAR A API PARA PODER REGISTRARLO
                 url = apidao.obtenerApiPorId(2).getUrlApi() + ruc;
                 try {
-                   realizarConsultaApi(url);
+                    realizarConsultaApi(url);
                 } catch (IOException ex) {
                     Logger.getLogger(Pasajes.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -864,10 +893,18 @@ public class Pasajes extends javax.swing.JInternalFrame {
                 String fechaformato2 = Funciones.convertirFecha(fecha);
 
                 String estado = "XML NO GENERADO";
-
+                
+                int vehiculo = Integer.parseInt(txtvehiculo.getText());
+                String codtipo = null;
+                if ("BOLETA".equals(tipo)) {
+                    codtipo = "03";
+                    
+                } else if ("FACTURA".equals(tipo)) {
+                      codtipo = "01";
+                }
                 // Crear comprobante
                 ComprobanteModel comprobante = new ComprobanteModel();
-                comprobante.setTipoComp(tipo);
+                comprobante.setTipoComp(codtipo);
                 comprobante.setSerieComp(serie);
                 comprobante.setDocclienteComp(docliente);
                 comprobante.setClienteComp(cliente);
@@ -882,6 +919,7 @@ public class Pasajes extends javax.swing.JInternalFrame {
                 comprobante.setEstadoComp(estado);
                 comprobante.setHoraComp(horatexto);
                 comprobante.setAfecComp("EXONERADO");
+                comprobante.setVehiculoComp(vehiculo);
 
                 comprobantedao.agregarComprobante(comprobante);
 
@@ -922,11 +960,11 @@ public class Pasajes extends javax.swing.JInternalFrame {
 
                 //CREACIÓN ARCHIVOS PLANOS
                 archivos.ArchivoPlanoCAB(configuracion, tipocompsunat, tipdoccli, obtenerComprobante);
-                archivos.ArchivoPlanoDET(configuracion, tipocompsunat,  obtenerDcomprobante, obtenerComprobante);
-                archivos.ArchivoPlanoTRI(configuracion, tipocompsunat,  obtenerComprobante);
-                archivos.ArchivoPlanoLEY(configuracion, tipocompsunat,  obtenerComprobante);
-                archivos.ArchivoPlanoACA(configuracion, tipocompsunat,  obtenerComprobante);
-                archivos.ArchivoPlanoPAG(configuracion, tipocompsunat,  obtenerComprobante);
+                archivos.ArchivoPlanoDET(configuracion, tipocompsunat, obtenerDcomprobante, obtenerComprobante);
+                archivos.ArchivoPlanoTRI(configuracion, tipocompsunat, obtenerComprobante);
+                archivos.ArchivoPlanoLEY(configuracion, tipocompsunat, obtenerComprobante);
+                archivos.ArchivoPlanoACA(configuracion, tipocompsunat, obtenerComprobante);
+                archivos.ArchivoPlanoPAG(configuracion, tipocompsunat, obtenerComprobante);
                 JOptionPane.showMessageDialog(null, "Archivos Planos Generados Correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
 
                 this.dispose();
@@ -957,20 +995,20 @@ public class Pasajes extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btncomprobanteActionPerformed
 
     private void btnnpasajeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnnpasajeroActionPerformed
-       JInternalFrame internalFrame = new Pasajero();
+        JInternalFrame internalFrame = new Pasajero();
 
-                Principal.jDesktopPane1.add(internalFrame);
-                // Calcular la posición para centrar el JInternalFrame
-                Dimension desktopSize = Principal.jDesktopPane1.getSize();
-                Dimension jInternalFrameSize = internalFrame.getSize();
+        Principal.jDesktopPane1.add(internalFrame);
+        // Calcular la posición para centrar el JInternalFrame
+        Dimension desktopSize = Principal.jDesktopPane1.getSize();
+        Dimension jInternalFrameSize = internalFrame.getSize();
 
-                int posX = (desktopSize.width - jInternalFrameSize.width) / 2;
-                int posY = (desktopSize.height - jInternalFrameSize.height) / 2;
+        int posX = (desktopSize.width - jInternalFrameSize.width) / 2;
+        int posY = (desktopSize.height - jInternalFrameSize.height) / 2;
 
-                // Establecer la ubicación centrada
-                internalFrame.setLocation(posX, posY);
+        // Establecer la ubicación centrada
+        internalFrame.setLocation(posX, posY);
 
-                internalFrame.setVisible(true);
+        internalFrame.setVisible(true);
     }//GEN-LAST:event_btnnpasajeroActionPerformed
 
     private void btnnempresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnnempresaActionPerformed
@@ -980,7 +1018,6 @@ public class Pasajes extends javax.swing.JInternalFrame {
     private void txtorigenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtorigenActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtorigenActionPerformed
-
 
     private void gestionarExcepcion(Exception ex) {
         System.out.println("Error: " + ex.getMessage());
@@ -1026,5 +1063,6 @@ public class Pasajes extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtrazon;
     private javax.swing.JTextField txtruc;
     private javax.swing.JTextField txttipocomprobante;
+    private javax.swing.JTextField txtvehiculo;
     // End of variables declaration//GEN-END:variables
 }
