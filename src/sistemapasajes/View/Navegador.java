@@ -46,6 +46,8 @@ public Navegador() throws PropertyVetoException {
 
         WebPanel = new javax.swing.JPanel();
 
+        setBackground(new java.awt.Color(255, 255, 255));
+        setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         setClosable(true);
         setIconifiable(true);
         setTitle("SFS SUNAT");
@@ -54,11 +56,11 @@ public Navegador() throws PropertyVetoException {
         WebPanel.setLayout(WebPanelLayout);
         WebPanelLayout.setHorizontalGroup(
             WebPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 905, Short.MAX_VALUE)
+            .addGap(0, 915, Short.MAX_VALUE)
         );
         WebPanelLayout.setVerticalGroup(
             WebPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 558, Short.MAX_VALUE)
+            .addGap(0, 568, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

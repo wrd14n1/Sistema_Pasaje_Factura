@@ -5,6 +5,7 @@
 package sistemapasajes.View;
 
 import javax.swing.JOptionPane;
+import sistemapasajes.Funciones;
 import sistemapasajes.dao.UsuarioDAO;
 import sistemapasajes.dao.UsuarioDAOImpl;
 import sistemapasajes.modelo.UsuarioModel;
@@ -19,9 +20,9 @@ public class Login extends javax.swing.JInternalFrame {
      * Creates new form Login
      */
     private Principal principal;
-     UsuarioDAO logindao = new UsuarioDAOImpl();
-        
-        UsuarioModel usuariolog = new UsuarioModel();
+    UsuarioDAO logindao = new UsuarioDAOImpl();
+
+    UsuarioModel usuariolog = new UsuarioModel();
 
     public Login(Principal principal) {
         initComponents();
@@ -48,25 +49,34 @@ public class Login extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
-        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        setBackground(new java.awt.Color(255, 255, 255));
+        setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         setTitle("Acceso");
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("Usuario:");
 
+        txtusuario.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        pswusuario.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         pswusuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pswusuarioActionPerformed(evt);
             }
         });
 
-        btningresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/marca-de-verificacion.png"))); // NOI18N
+        btningresar.setBackground(new java.awt.Color(30, 200, 140));
+        btningresar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btningresar.setForeground(new java.awt.Color(255, 255, 255));
         btningresar.setText("Ingresar");
+        btningresar.setBorder(null);
         btningresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btningresarActionPerformed(evt);
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Clave:");
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/privacidad.png"))); // NOI18N
@@ -75,10 +85,14 @@ public class Login extends javax.swing.JInternalFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(115, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addGap(108, 108, 108))
             .addGroup(layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btningresar)
+                    .addComponent(btningresar, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -88,10 +102,6 @@ public class Login extends javax.swing.JInternalFrame {
                             .addComponent(txtusuario, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
                             .addComponent(pswusuario))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(115, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addGap(108, 108, 108))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -106,8 +116,8 @@ public class Login extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(pswusuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addGap(18, 18, 18)
-                .addComponent(btningresar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btningresar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -119,10 +129,10 @@ public class Login extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btningresarActionPerformed
 
     private void pswusuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pswusuarioActionPerformed
-       ingresar();
+        ingresar();
     }//GEN-LAST:event_pswusuarioActionPerformed
- public void ingresar(){
-           
+    public void ingresar() {
+
         String usuario = txtusuario.getText();
         String password = pswusuario.getText();
         usuariolog = logindao.loginUsuario(usuario, password);
@@ -131,15 +141,19 @@ public class Login extends javax.swing.JInternalFrame {
             principal.menupasaje.setEnabled(true);
             principal.menusunat.setEnabled(true);
             principal.menulogin.setEnabled(false);
+            principal.menuencomienda.setEnabled(true);
+            principal.menureporte.setEnabled(true);
 
             this.setVisible(false);
-              JOptionPane.showMessageDialog(null, "Acceso Correcto, Bienvenido "  + usuariolog.getDatosUsua(), "Hola", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Acceso Correcto, Bienvenido " + usuariolog.getDatosUsua(), "Hola", JOptionPane.INFORMATION_MESSAGE);
+            ProgramacionDiaria lprograma = new ProgramacionDiaria();
+            Funciones.centrarInternalFrame(lprograma);
 
         } else {
-              JOptionPane.showMessageDialog(null, "Error: NO EXISTE USUARIO O NO COINCIDE LOS DATOS, POR FAVOR INTENTE DE NUEVO " , "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error: NO EXISTE USUARIO O NO COINCIDE LOS DATOS, POR FAVOR INTENTE DE NUEVO ", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
- }
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btningresar;

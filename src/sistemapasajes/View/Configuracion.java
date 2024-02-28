@@ -174,51 +174,81 @@ public class Configuracion extends javax.swing.JInternalFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         btnactualizar = new javax.swing.JButton();
+        btnnuevo = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(255, 255, 255));
+        setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 14))); // NOI18N
         setClosable(true);
         setIconifiable(true);
         setTitle("Configuración General");
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("RUC:");
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Razón Social:");
 
+        txtruc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        txtrazon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Nombre Comercial:");
 
+        txtnom.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setText("Dirección:");
 
-        btnguardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/guardar.png"))); // NOI18N
+        txtdirec.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        btnguardar.setBackground(new java.awt.Color(30, 200, 130));
+        btnguardar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnguardar.setForeground(new java.awt.Color(255, 255, 255));
         btnguardar.setText("Guardar");
+        btnguardar.setBorder(null);
         btnguardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnguardarActionPerformed(evt);
             }
         });
 
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setText("Ruta Facturador:");
 
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel6.setText("Ruta Archivos:");
 
         txtsunat.setEditable(false);
+        txtsunat.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         txtarchivo.setEditable(false);
+        txtarchivo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        btnsunat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/lupa.png"))); // NOI18N
+        btnsunat.setBackground(new java.awt.Color(45, 85, 195));
+        btnsunat.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnsunat.setForeground(new java.awt.Color(255, 255, 255));
         btnsunat.setText("Buscar");
+        btnsunat.setBorder(null);
         btnsunat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnsunatActionPerformed(evt);
             }
         });
 
-        btnarchivo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/lupa.png"))); // NOI18N
+        btnarchivo.setBackground(new java.awt.Color(45, 85, 195));
+        btnarchivo.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnarchivo.setForeground(new java.awt.Color(255, 255, 255));
         btnarchivo.setText("Buscar");
+        btnarchivo.setBorder(null);
         btnarchivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnarchivoActionPerformed(evt);
             }
         });
 
+        tabconfig.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
+        tabconfig.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tabconfig.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -231,14 +261,22 @@ public class Configuracion extends javax.swing.JInternalFrame {
             }
         ));
         tabconfig.setAutoscrolls(false);
+        tabconfig.setSelectionBackground(new java.awt.Color(255, 255, 255));
+        tabconfig.getTableHeader().setResizingAllowed(false);
+        tabconfig.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tabconfig);
 
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel7.setText("Ruta Logo:");
 
         txtlogo.setEditable(false);
+        txtlogo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        btnlogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/lupa.png"))); // NOI18N
+        btnlogo.setBackground(new java.awt.Color(45, 85, 195));
+        btnlogo.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnlogo.setForeground(new java.awt.Color(255, 255, 255));
         btnlogo.setText("Buscar");
+        btnlogo.setBorder(null);
         btnlogo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnlogoActionPerformed(evt);
@@ -246,29 +284,49 @@ public class Configuracion extends javax.swing.JInternalFrame {
         });
 
         txtAr2.setColumns(20);
+        txtAr2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtAr2.setRows(5);
         jScrollPane2.setViewportView(txtAr2);
 
         txtAr1.setColumns(20);
+        txtAr1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtAr1.setRows(5);
         jScrollPane3.setViewportView(txtAr1);
 
         txtAr3.setColumns(20);
+        txtAr3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtAr3.setRows(5);
         jScrollPane4.setViewportView(txtAr3);
 
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel8.setText("Texto 1:");
 
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel9.setText("Texto 2:");
 
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel10.setText("Texto 3:");
 
-        btnactualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/actualizar.png"))); // NOI18N
+        btnactualizar.setBackground(new java.awt.Color(40, 150, 180));
+        btnactualizar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnactualizar.setForeground(new java.awt.Color(255, 255, 255));
         btnactualizar.setText("Actualizar");
+        btnactualizar.setBorder(null);
         btnactualizar.setEnabled(false);
         btnactualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnactualizarActionPerformed(evt);
+            }
+        });
+
+        btnnuevo.setBackground(new java.awt.Color(45, 85, 195));
+        btnnuevo.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnnuevo.setForeground(new java.awt.Color(255, 255, 255));
+        btnnuevo.setText("Nuevo");
+        btnnuevo.setBorder(null);
+        btnnuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnnuevoActionPerformed(evt);
             }
         });
 
@@ -279,7 +337,7 @@ public class Configuracion extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 736, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 746, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
@@ -287,16 +345,18 @@ public class Configuracion extends javax.swing.JInternalFrame {
                             .addComponent(jLabel3))
                         .addGap(12, 12, 12)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtrazon)
-                            .addComponent(txtnom)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtruc, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(txtrazon, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtnom, javax.swing.GroupLayout.Alignment.TRAILING)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnguardar)
+                        .addComponent(btnnuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnactualizar))
+                        .addComponent(btnguardar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnactualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
@@ -309,21 +369,22 @@ public class Configuracion extends javax.swing.JInternalFrame {
                         .addGap(29, 29, 29)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtdirec)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtsunat)
-                                    .addComponent(txtarchivo))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnsunat, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(btnarchivo, javax.swing.GroupLayout.Alignment.TRAILING)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(txtlogo)
-                                .addGap(6, 6, 6)
-                                .addComponent(btnlogo))
                             .addComponent(jScrollPane3)
-                            .addComponent(jScrollPane2))))
+                            .addComponent(jScrollPane2)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(4, 4, 4)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtdirec)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtsunat)
+                                            .addComponent(txtarchivo)
+                                            .addComponent(txtlogo))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(btnlogo, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(btnarchivo, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(btnsunat, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -346,21 +407,23 @@ public class Configuracion extends javax.swing.JInternalFrame {
                     .addComponent(jLabel4)
                     .addComponent(txtdirec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtsunat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnsunat))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnsunat, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel5)
+                        .addComponent(txtsunat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(txtarchivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnarchivo))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnarchivo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel6)
+                        .addComponent(txtarchivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtlogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel7)
-                        .addComponent(btnlogo)))
+                        .addComponent(btnlogo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -374,10 +437,12 @@ public class Configuracion extends javax.swing.JInternalFrame {
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnguardar)
-                    .addComponent(btnactualizar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnguardar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnnuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnactualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -417,6 +482,7 @@ public class Configuracion extends javax.swing.JInternalFrame {
             cargarDatosConfiguracion();
             limpiarCamposTexto(txtruc, txtrazon, txtnom, txtdirec, txtsunat, txtarchivo, txtlogo);
             limpiarCamposTexto(txtAr1,txtAr2,txtAr3);
+            editartabla();
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
@@ -425,7 +491,7 @@ public class Configuracion extends javax.swing.JInternalFrame {
     private void btnsunatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsunatActionPerformed
         /*File chooser*/
         // Seleccionar la carpeta utilizando JFileChooser
-        JFileChooser chooser = new JFileChooser();
+        JFileChooser chooser = new JFileChooser(txtsunat.getText());
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         int seleccion = chooser.showOpenDialog(this);
@@ -444,7 +510,7 @@ public class Configuracion extends javax.swing.JInternalFrame {
     private void btnarchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnarchivoActionPerformed
         /*File chooser*/
         // Seleccionar la carpeta utilizando JFileChooser
-        JFileChooser chooser = new JFileChooser();
+        JFileChooser chooser = new JFileChooser(txtarchivo.getText());
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         int seleccion = chooser.showOpenDialog(this);
@@ -462,7 +528,7 @@ public class Configuracion extends javax.swing.JInternalFrame {
 
     private void btnlogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnlogoActionPerformed
         // Seleccionar el archivo de imagen utilizando JFileChooser
-        JFileChooser chooser = new JFileChooser();
+        JFileChooser chooser = new JFileChooser(txtlogo.getText());
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de Imagen", "jpg", "jpeg", "png", "gif");
         chooser.setFileFilter(filter);
         int seleccion = chooser.showOpenDialog(this);
@@ -531,7 +597,7 @@ public class Configuracion extends javax.swing.JInternalFrame {
                 
                 limpiarCamposTexto(txtruc, txtrazon, txtnom, txtdirec, txtsunat, txtarchivo, txtlogo);
                 limpiarCamposTexto(txtAr1,txtAr2,txtAr3);
-
+                editartabla();
                 // Restablecer la fila seleccionada
                 filaSeleccionada = -1;
 
@@ -544,12 +610,19 @@ public class Configuracion extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnactualizarActionPerformed
 
+    private void btnnuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnnuevoActionPerformed
+       limpiarCamposTexto(txtruc, txtrazon, txtnom, txtdirec, txtsunat, txtarchivo, txtlogo);
+                limpiarCamposTexto(txtAr1,txtAr2,txtAr3);
+                editartabla();
+    }//GEN-LAST:event_btnnuevoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnactualizar;
     private javax.swing.JButton btnarchivo;
     private javax.swing.JButton btnguardar;
     private javax.swing.JButton btnlogo;
+    private javax.swing.JButton btnnuevo;
     private javax.swing.JButton btnsunat;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

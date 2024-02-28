@@ -5,6 +5,7 @@
 package sistemapasajes;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import sistemapasajes.View.Principal;
 
@@ -27,8 +28,7 @@ public class SistemaPasajes {
                 Principal prin = new Principal();
                 prin.show();
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (SQLException ex) {
              System.out.println("Error al establecer la conexión: " + ex.getMessage());
              
         }

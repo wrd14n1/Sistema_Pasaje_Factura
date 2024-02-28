@@ -1,60 +1,49 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package sistemapasajes.View;
 
 import com.jtattoo.plaf.fast.FastLookAndFeel;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.beans.PropertyVetoException;
-import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import sistemapasajes.Funciones;
 import sistemapasajes.ProcessOutputReader;
 import sistemapasajes.Sunat;
-import sistemapasajes.dao.ComprobanteDAO;
-import sistemapasajes.dao.ComprobanteDAOImpl;
 import sistemapasajes.dao.ConfiguracionDAO;
 import sistemapasajes.dao.ConfiguracionDAOImpl;
-import sistemapasajes.dao.RutaArchivoDAO;
-import sistemapasajes.dao.RutaArchivoDAOImpl;
-import sistemapasajes.modelo.ComprobanteModel;
 import sistemapasajes.modelo.ConfiguracionModel;
-import sistemapasajes.modelo.RutaArchivoModel;
 
 /**
  *
  * @author edson
  */
-public class Principal extends javax.swing.JFrame {
-
-       
+public final class Principal extends javax.swing.JFrame {
 
  
-    /**
-     * Creates new form Principal
-     */
     public Principal() {
         initComponents();
         // Configura el look and feel de JTattoo
+       
         try {
             // Puedes cambiar "Acryl" por el nombre de otro tema de JTattoo si lo prefieres
             UIManager.setLookAndFeel(new FastLookAndFeel());
         } catch (UnsupportedLookAndFeelException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //setIconImage(new ImageIcon(getClass().getResource("/recursos/icono.ico")).getImage());
+         Login vlog = new Login(this);
+        
         // Inicia maximizado
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         
-
+        Funciones.centrarInternalFrame(vlog);
     }
 
 
@@ -69,10 +58,12 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem9 = new javax.swing.JMenuItem();
-        jDesktopPane1 = new javax.swing.JDesktopPane();
+        ImageIcon icon = new ImageIcon(getClass().getResource("/recursos/5255.jpg")); Image image =icon.getImage();
+        jDesktopPane1 = new javax.swing.JDesktopPane(){     public void paintComponent(Graphics g){ g.drawImage(image,0,0,getWidth(),getHeight(),this);     } };
         jMenuBar1 = new javax.swing.JMenuBar();
         menulogin = new javax.swing.JMenu();
         menuitemingresar = new javax.swing.JMenuItem();
+        menuitemingresar1 = new javax.swing.JMenuItem();
         menuconf = new javax.swing.JMenu();
         opconfig = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -83,11 +74,11 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem11 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        menuencomienda = new javax.swing.JMenu();
         menusunat = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
+        menureporte = new javax.swing.JMenu();
         jMenuItem12 = new javax.swing.JMenuItem();
         jMenuItem13 = new javax.swing.JMenuItem();
 
@@ -97,6 +88,7 @@ public class Principal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema de Pasajes");
+        setIconImage(new ImageIcon(getClass().getResource("/recursos/icono2.ico")).getImage());
         setLocationByPlatform(true);
         setName("Ventana Principal"); // NOI18N
 
@@ -108,16 +100,28 @@ public class Principal extends javax.swing.JFrame {
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 498, Short.MAX_VALUE)
+            .addGap(0, 479, Short.MAX_VALUE)
         );
 
+        jMenuBar1.setBackground(new java.awt.Color(51, 51, 51));
+        jMenuBar1.setBorder(null);
         jMenuBar1.setEnabled(false);
+        jMenuBar1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jMenuBar1.setMinimumSize(new java.awt.Dimension(602, 50));
+        jMenuBar1.setPreferredSize(new java.awt.Dimension(602, 50));
 
+        menulogin.setBackground(new java.awt.Color(90, 92, 105));
+        menulogin.setBorder(null);
+        menulogin.setForeground(new java.awt.Color(255, 255, 255));
         menulogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/ingresar_menu.png"))); // NOI18N
-        menulogin.setText("Ingresar");
+        menulogin.setText("Sesión");
+        menulogin.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
+        menuitemingresar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         menuitemingresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/ingresar_menu.png"))); // NOI18N
         menuitemingresar.setText("Ingresar");
+        menuitemingresar.setBorder(null);
+        menuitemingresar.setPreferredSize(new java.awt.Dimension(94, 30));
         menuitemingresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuitemingresarActionPerformed(evt);
@@ -125,12 +129,28 @@ public class Principal extends javax.swing.JFrame {
         });
         menulogin.add(menuitemingresar);
 
+        menuitemingresar1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        menuitemingresar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/ingresar_menu.png"))); // NOI18N
+        menuitemingresar1.setText("Cerrar");
+        menuitemingresar1.setBorder(null);
+        menuitemingresar1.setPreferredSize(new java.awt.Dimension(82, 30));
+        menuitemingresar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuitemingresar1ActionPerformed(evt);
+            }
+        });
+        menulogin.add(menuitemingresar1);
+
         jMenuBar1.add(menulogin);
 
+        menuconf.setBorder(null);
+        menuconf.setForeground(new java.awt.Color(255, 255, 255));
         menuconf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/conf_menu.png"))); // NOI18N
         menuconf.setText("Configuración");
         menuconf.setEnabled(false);
+        menuconf.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
+        opconfig.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         opconfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/conf_gen_menu.png"))); // NOI18N
         opconfig.setText("General");
         opconfig.addActionListener(new java.awt.event.ActionListener() {
@@ -140,6 +160,7 @@ public class Principal extends javax.swing.JFrame {
         });
         menuconf.add(opconfig);
 
+        jMenuItem2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/carros.png"))); // NOI18N
         jMenuItem2.setText("Vehiculos");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
@@ -149,6 +170,7 @@ public class Principal extends javax.swing.JFrame {
         });
         menuconf.add(jMenuItem2);
 
+        jMenuItem3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/ruta_menu.png"))); // NOI18N
         jMenuItem3.setText("Rutas");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
@@ -158,6 +180,7 @@ public class Principal extends javax.swing.JFrame {
         });
         menuconf.add(jMenuItem3);
 
+        jMenuItem6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jMenuItem6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/api_menu.png"))); // NOI18N
         jMenuItem6.setText("API");
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
@@ -167,6 +190,7 @@ public class Principal extends javax.swing.JFrame {
         });
         menuconf.add(jMenuItem6);
 
+        jMenuItem10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jMenuItem10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/respaldo.png"))); // NOI18N
         jMenuItem10.setText("Respaldo Base de Datos");
         jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
@@ -178,10 +202,14 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuBar1.add(menuconf);
 
+        menupasaje.setBorder(null);
+        menupasaje.setForeground(new java.awt.Color(255, 255, 255));
         menupasaje.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/pasaje_menu.png"))); // NOI18N
         menupasaje.setText("Pasajes");
         menupasaje.setEnabled(false);
+        menupasaje.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
+        jMenuItem11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jMenuItem11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/conf_gen_menu.png"))); // NOI18N
         jMenuItem11.setText("Programación Diaria");
         jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
@@ -191,6 +219,7 @@ public class Principal extends javax.swing.JFrame {
         });
         menupasaje.add(jMenuItem11);
 
+        jMenuItem1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/pasaje_menu.png"))); // NOI18N
         jMenuItem1.setText("Generar Pasajes");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -200,6 +229,7 @@ public class Principal extends javax.swing.JFrame {
         });
         menupasaje.add(jMenuItem1);
 
+        jMenuItem5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jMenuItem5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/pasaje-aereo.png"))); // NOI18N
         jMenuItem5.setText("Lista de Pasajes");
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
@@ -211,13 +241,22 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuBar1.add(menupasaje);
 
-        jMenu2.setText("Encomiendas");
-        jMenuBar1.add(jMenu2);
+        menuencomienda.setBorder(null);
+        menuencomienda.setForeground(new java.awt.Color(255, 255, 255));
+        menuencomienda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/pasaje-aereo.png"))); // NOI18N
+        menuencomienda.setText("Encomiendas");
+        menuencomienda.setEnabled(false);
+        menuencomienda.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jMenuBar1.add(menuencomienda);
 
+        menusunat.setBorder(null);
+        menusunat.setForeground(new java.awt.Color(255, 255, 255));
         menusunat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/sunat_menu.png"))); // NOI18N
         menusunat.setText("Facturador");
         menusunat.setEnabled(false);
+        menusunat.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
+        jMenuItem7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jMenuItem7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/archivo-ejecutable.png"))); // NOI18N
         jMenuItem7.setText("Ejecutar Servidor SFS");
         jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
@@ -227,6 +266,7 @@ public class Principal extends javax.swing.JFrame {
         });
         menusunat.add(jMenuItem7);
 
+        jMenuItem8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jMenuItem8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/navegador.png"))); // NOI18N
         jMenuItem8.setText("Abrir Facturador");
         jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
@@ -238,20 +278,29 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuBar1.add(menusunat);
 
-        jMenu3.setText("Reportes");
+        menureporte.setBorder(null);
+        menureporte.setForeground(new java.awt.Color(255, 255, 255));
+        menureporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/navegador.png"))); // NOI18N
+        menureporte.setText("Reportes");
+        menureporte.setEnabled(false);
+        menureporte.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
+        jMenuItem12.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jMenuItem12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/navegador.png"))); // NOI18N
         jMenuItem12.setText("Reporte de Pasajes");
         jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem12ActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem12);
+        menureporte.add(jMenuItem12);
 
+        jMenuItem13.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jMenuItem13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/navegador.png"))); // NOI18N
         jMenuItem13.setText("Reporte de Encomiendas");
-        jMenu3.add(jMenuItem13);
+        menureporte.add(jMenuItem13);
 
-        jMenuBar1.add(jMenu3);
+        jMenuBar1.add(menureporte);
 
         setJMenuBar(jMenuBar1);
 
@@ -278,92 +327,28 @@ public class Principal extends javax.swing.JFrame {
     private void opconfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opconfigActionPerformed
         Configuracion vconf = new Configuracion();
 
-        centrarInternalFrame(vconf);
+        Funciones.centrarInternalFrame(vconf);
     }//GEN-LAST:event_opconfigActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         Vehiculo vvehi = new Vehiculo();
-        centrarInternalFrame(vvehi);
+        Funciones.centrarInternalFrame(vvehi);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         Ruta vruta = new Ruta();
-        centrarInternalFrame(vruta);
+        Funciones.centrarInternalFrame(vruta);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         Pasajes vpasaje = new Pasajes();
-        centrarInternalFrame(vpasaje);
+        Funciones.centrarInternalFrame(vpasaje);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         Api vapi = new Api();
-        centrarInternalFrame(vapi);
+        Funciones.centrarInternalFrame(vapi);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
-
-    /* PARA EJECUTAR
-    
-         try {
-            // Obtener la configuración desde el DAO
-            ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
-            ConfiguracionModel configuracion = configdao.obtenerConfiguracionPorId(1);
-
-            // Comprobar si se está ejecutando como administrador
-            boolean isAdmin = isAdmin();
-
-            // Si no se está ejecutando como administrador, volver a ejecutar con privilegios elevados
-            if (!isAdmin) {
-                String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
-                String currentJar = new File(Principal.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
-                ProcessBuilder builder = new ProcessBuilder(javaBin, "-jar", currentJar);
-                builder.start();
-                System.exit(0);
-            }
-
-            // Construir la ruta completa del archivo JAR
-            String rutaJar = configuracion.getRutaSunat() + File.separator + "facturadorApp-1.4.jar";
-
-            // Obtener el directorio del archivo JAR
-            File directorioJar = new File(rutaJar).getParentFile();
-
-            // Construir la ruta completa del archivo YAML
-            String rutaYaml = configuracion.getRutaSunat() + File.separator + "prod.yaml";
-
-            // Crear el proceso para ejecutar el servidor
-            ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar", rutaJar, "server", rutaYaml);
-
-            // Redirigir la salida estándar y de error a un archivo de texto en el mismo directorio que el JAR
-            File archivoSalida = new File(directorioJar, "salida_del_proceso.txt");
-            processBuilder.redirectOutput(ProcessBuilder.Redirect.to(archivoSalida));
-            processBuilder.redirectError(ProcessBuilder.Redirect.appendTo(archivoSalida));
-
-            // Iniciar el proceso
-            Process proceso = processBuilder.start();
-
-            // Esperar a que el proceso termine
-            int resultado = proceso.waitFor();
-
-            // Leer la salida de error del proceso
-            BufferedReader errorReader = new BufferedReader(new InputStreamReader(proceso.getErrorStream()));
-            StringBuilder errorOutput = new StringBuilder();
-            String lineaError;
-            while ((lineaError = errorReader.readLine()) != null) {
-                errorOutput.append(lineaError).append("\n");
-            }
-
-            // Mostrar mensaje con el resultado y la salida de error
-            String mensaje = "Resultado: " + resultado + "\n\nSalida de Error:\n" + errorOutput.toString();
-            JOptionPane.showMessageDialog(null, mensaje, "Ejecución del Servidor", JOptionPane.INFORMATION_MESSAGE);
-
-        } catch (IOException | InterruptedException  ex) {
-            ex.printStackTrace();
-            // Mostrar mensaje en caso de excepción
-            String mensaje = "Error al ejecutar el servidor:\n" + ex.getMessage();
-            JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-     */
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
         Thread thread = new Thread(() -> {
@@ -378,26 +363,24 @@ public class Principal extends javax.swing.JFrame {
         Navegador vnav;
         try {
             vnav = new Navegador();
-            centrarInternalFrame(vnav);
+            Funciones.centrarInternalFrame(vnav);
 
         } catch (PropertyVetoException ex) {
             Logger.getLogger(Principal.class
                     .getName()).log(Level.SEVERE, null, ex);
-        }
-
-        
+        }        
 
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         Lpasajesxml vlpje = new Lpasajesxml();
 
-        centrarInternalFrame(vlpje);
+        Funciones.centrarInternalFrame(vlpje);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void menuitemingresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuitemingresarActionPerformed
         Login vlog = new Login(this);
-        centrarInternalFrame(vlog);
+        Funciones.centrarInternalFrame(vlog);
     }//GEN-LAST:event_menuitemingresarActionPerformed
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
@@ -434,58 +417,22 @@ public class Principal extends javax.swing.JFrame {
                 System.out.println("Error al realizar la copia de seguridad. Código de salida: " + exitCode);
             }
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
         }
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
         ProgramacionDiaria lprograma = new ProgramacionDiaria();
-        centrarInternalFrame(lprograma);
+        Funciones.centrarInternalFrame(lprograma);
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
-    public void centrarInternalFrame(JInternalFrame internalFrame) {
+    private void menuitemingresar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuitemingresar1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuitemingresar1ActionPerformed
 
-        // Agrega el internal frame al desktop pane
-        jDesktopPane1.add(internalFrame);
-
-        // Obtén el tamaño del desktop pane
-        int desktopAncho = jDesktopPane1.getWidth();
-        int desktopAlto = jDesktopPane1.getHeight();
-
-        // Obtén el tamaño del internal frame
-        int frameAncho = internalFrame.getWidth();
-        int frameAlto = internalFrame.getHeight();
-
-        // Calcula las coordenadas para centrar el internal frame
-        int x = (desktopAncho - frameAncho) / 2;
-        int y = (desktopAlto - frameAlto) / 2;
-
-        // Ajusta las coordenadas si la ventana principal está maximizada (considerando una pantalla 16:9)
-        if (getExtendedState() == javax.swing.JFrame.MAXIMIZED_BOTH) {
-            x = (desktopAncho - frameAncho) / 2;
-            y = (desktopAlto - frameAlto) / 2;
-        }
-
-        // Establece la posición del internal frame
-        internalFrame.setLocation(x, y);
-
-        // Hacer visible el internal frame
-        internalFrame.setVisible(true);
-    }
-
-    private boolean isAdmin() {
-        String groups[] = (new com.sun.security.auth.module.NTSystem()).getGroupIDs();
-        for (String group : groups) {
-            if (group.equals("S-1-5-32-544")) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     /**
      * @param args the command line arguments
@@ -540,8 +487,6 @@ public class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JDesktopPane jDesktopPane1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private static javax.swing.JMenuItem jMenuItem10;
@@ -557,9 +502,12 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
     public javax.swing.JMenu menuconf;
+    public javax.swing.JMenu menuencomienda;
     private javax.swing.JMenuItem menuitemingresar;
+    private javax.swing.JMenuItem menuitemingresar1;
     public javax.swing.JMenu menulogin;
     public javax.swing.JMenu menupasaje;
+    public javax.swing.JMenu menureporte;
     public javax.swing.JMenu menusunat;
     private javax.swing.JMenuItem opconfig;
     // End of variables declaration//GEN-END:variables

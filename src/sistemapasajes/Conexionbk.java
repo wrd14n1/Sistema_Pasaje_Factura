@@ -14,14 +14,13 @@ import javax.swing.JOptionPane;
  *
  * @author edson
  */
-public class Conexion {
+public class Conexionbk {
 
     // Configuración de la conexión
-    private static final String URL = "jdbc:mysql://127.0.0.1:3306/bd_pasaje";
-    
+    private static final String URL = "jdbc:mysql://localhost:3306/bd_pasaje";
     private static final String USUARIO = "root";
-   // private static final String CONTRASENA = "020320";
-    private static final String CONTRASENA = "";
+    private static final String CONTRASENA = "020320";
+    //private static final String CONTRASENA = "";
 
     private Connection conexion;
 
