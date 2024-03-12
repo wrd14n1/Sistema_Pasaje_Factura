@@ -132,11 +132,43 @@ public class RutaAsignadaDAOImpl implements RutaAsignadaDAO {
         int vehiculoAsigRuta = rs.getInt("vehiculo_asig");
         int rutaAsigRuta = rs.getInt("ruta_asig");
         String origenAsigRuta = rs.getString("origen_asig");
-        String destinoAsigRuta = ("destino_asig");
+        String destinoAsigRuta = rs.getString("destino_asig");
         String descVehiculoAsigRuta = rs.getString("desc_vehi");
         String placavehiAsigRuta = rs.getString("placa_vehi");
 
         return new AsignacionRutaModel(idRutaAsignada, fechaAsigRuta, horaAsigRuta, vehiculoAsigRuta, rutaAsigRuta, origenAsigRuta, destinoAsigRuta, descVehiculoAsigRuta, placavehiAsigRuta);
+    }
+
+    @Override
+    public List<AsignacionRutaModel> obtenerAsignacionRutasporFechaTotal(String fechaAsignacionRuta) {
+       List<AsignacionRutaModel> rutasasignadas = new ArrayList<>();
+        String query = "SELECT * FROM asignacionruta"
+                + " INNER JOIN vehiculo ON id_vehi=vehiculo_asig"
+                + " WHERE fecha_asig = ? ";
+
+        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+            stmt.setString(1, fechaAsignacionRuta);
+         
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    AsignacionRutaModel rutaasignada = obtenerRutaAsignadaDesdeResultSet(rs);
+                    rutasasignadas.add(rutaasignada);
+                }
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al obtener lista de vehiculos asignados: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            System.out.println("error:" + ex.getMessage());
+        } finally {
+            Conexion desconectar = new Conexion();
+            try {
+                desconectar.desconectar();
+                System.out.println("Desconexión exitosa.");
+            } catch (SQLException ex) {
+                System.out.println("Error al desconectar" + ex.getMessage());
+            }
+        }
+
+        return rutasasignadas;
     }
 
 }

@@ -29,7 +29,9 @@ public class AsignacionRutaModel {
         this.fechaAsigRuta = fechaAsigRuta;
         this.horaAsigRuta=horaAsigRuta;
         this.vehiculoAsigRuta=vehiculoAsigRuta;
-        this.rutaAsigRuta=rutaAsigRuta;    
+        this.rutaAsigRuta=rutaAsigRuta;
+        this.origenAsigRuta=origenAsigRuta;
+        this.destinoAsigRuta=destinoAsigRuta;
         this.descVehiculoAsigRuta= descVehiculoAsigRuta;
         this.placavehiAsigRuta = placavehiAsigRuta;
     }

@@ -16,6 +16,7 @@ public interface RutaAsignadaDAO {
     AsignacionRutaModel obtenerRutaporVehiculo (int vehiculoAsignacionRuta);
     List<AsignacionRutaModel> obtenerTodasAsignacionRutas();
     List<AsignacionRutaModel> obtenerAsignacionRutasporFecha(String fechaAsignacionRuta, int rutaAsignacionruta);
+    List<AsignacionRutaModel> obtenerAsignacionRutasporFechaTotal(String fechaAsignacionRuta);
     void agregarRutaAsignada(AsignacionRutaModel asignacionruta);
     void actualizarRuta(AsignacionRutaModel asignacionruta);
     void eliminarAsignacionRuta (int idAsignacionRuta);

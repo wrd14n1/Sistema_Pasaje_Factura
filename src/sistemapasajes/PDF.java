@@ -263,7 +263,30 @@ public class PDF {
 
             // Agregar contenido en la nueva página
             Paragraph nuevoContenido = new Paragraph("Contenido en la nueva página", fontNegrita);
-            document.add(nuevoContenido);
+             Paragraph titulo2 = new Paragraph(datosconfig.getRazonConf(), fontTitulo);
+            titulo2.setAlignment(Element.ALIGN_CENTER);
+            document.add(titulo2);
+            Paragraph serie2 = new Paragraph(datosconfig.getRucConf() + "\n"
+                    + txtcomp + " ELECTRONICA" + "\n"
+                    + datoscomprobante.getSerieComp(), fontTitulo);
+            serie2.setAlignment(Element.ALIGN_CENTER);
+            document.add(serie2);
+             Paragraph fecha2 = new Paragraph(datoscomprobante.getFechaComp() + "   " + datoscomprobante.getHoraComp(), fontNormal);
+            fecha2.setAlignment(Element.ALIGN_LEFT);
+            document.add(fecha2);
+            
+            if ("AFECTO".equals(datoscomprobante.getAfecComp())) {
+
+            } else if ("EXONERADO".equals(datoscomprobante.getAfecComp())) {
+                 Paragraph servicio = new Paragraph("SERVICIO DE TRANSPORTE DE PASAJERO", fontNegrita);
+                 Paragraph origen = new Paragraph("ORIGEN:" );
+                 Paragraph destino = new Paragraph("DESTINO: ");
+                 Paragraph datos = new Paragraph("PASAJERO: " + datosdetcomprobante.getDescripcionDcomp(), fontNormal);
+                 Paragraph documento= new Paragraph();
+                 document.add(datos);
+                  document.add(fecha2);
+            }
+            
 
             document.close();
             System.out.println("PDF creado exitosamente: " + rutaPDF);

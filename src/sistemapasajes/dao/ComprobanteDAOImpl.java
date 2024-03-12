@@ -229,7 +229,7 @@ public class ComprobanteDAOImpl implements ComprobanteDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     ComprobanteModel comprobante = obtenerComprobanteDesdeResultSet(rs);
-                    
+
                     comprobantes.add(comprobante);
                 }
             }
@@ -268,6 +268,34 @@ public class ComprobanteDAOImpl implements ComprobanteDAO {
                 System.out.println("Error al desconectar" + ex.getMessage());
             }
         }
+    }
+
+    @Override
+    public List<ComprobanteModel> reporteComprobante(String fechaIni, String fechaFin) {
+        List<ComprobanteModel> comprobantes = new ArrayList<>();
+        String query = "SELECT * FROM comprobante WHERE fecha_comp >= ? AND fecha_comp <= ?";
+        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+            stmt.setString(1, fechaIni);
+            stmt.setString(2, fechaFin);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    ComprobanteModel comprobante = obtenerComprobanteDesdeResultSet(rs);
+                    comprobantes.add(comprobante);
+                }
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al cargar los datos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            Conexion desconectar = new Conexion();
+            try {
+                desconectar.desconectar();
+                System.out.println("Desconexión exitosa.");
+            } catch (SQLException ex) {
+                System.out.println("Error al desconectar" + ex.getMessage());
+            }
+        }
+
+        return comprobantes;
     }
 
 }

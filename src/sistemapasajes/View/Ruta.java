@@ -17,46 +17,76 @@ import sistemapasajes.modelo.RutaModel;
  * @author edson
  */
 public class Ruta extends javax.swing.JInternalFrame {
+
     String tramo;
     double precio;
     String punto1;
     String punto2;
+    int filaSeleccionada;
+    String idRuta;
+
     /**
      * Creates new form Ruta
      */
     public Ruta() {
         initComponents();
-        cargarDatosRutas(); 
+        cargarDatosRutas();
+        editarFilaSeleccionada();
     }
-    private void cargarDatosRutas(){
-       DefaultTableModel modeloTabla = new DefaultTableModel();
+
+    private void cargarDatosRutas() {
+        DefaultTableModel modeloTabla = new DefaultTableModel();
         modeloTabla.addColumn("ID");
         modeloTabla.addColumn("Punto 1");
         modeloTabla.addColumn("Punto 2");
         modeloTabla.addColumn("Descripción");
         modeloTabla.addColumn("Precio");
-        
+
         RutaDAO rutadao = new RutaDAOImpl();
         List<RutaModel> rutas = rutadao.obtenerTodasRutas();
-        for (RutaModel ruta: rutas) {
-            Object[] fila ={
+        for (RutaModel ruta : rutas) {
+            Object[] fila = {
                 ruta.getIdRuta(),
                 ruta.getPunto1Ruta(),
                 ruta.getPunto2Ruta(),
                 ruta.getTramoRuta(),
-                ruta.getPrecioRuta(),
-                
-            };
+                ruta.getPrecioRuta(),};
             modeloTabla.addRow(fila);
         }
         tabruta.setModel(modeloTabla);
     }
+
+    private void editarFilaSeleccionada() {
+        tabruta.getSelectionModel().addListSelectionListener(
+                e -> {
+                    if (!e.getValueIsAdjusting()) {
+                        filaSeleccionada = tabruta.getSelectedRow();
+                        btnguardar.setEnabled(false);
+                        btnactualizar.setEnabled(true);
+                        if (filaSeleccionada != -1) {
+                            idRuta = tabruta.getValueAt(filaSeleccionada, 0).toString();
+                            punto1 = tabruta.getValueAt(filaSeleccionada, 1).toString();
+                            punto2 = tabruta.getValueAt(filaSeleccionada, 2).toString();
+                            tramo = tabruta.getValueAt(filaSeleccionada, 3).toString();
+                            precio = Double.parseDouble(tabruta.getValueAt(filaSeleccionada, 4).toString());
+
+                       txtpunto1.setText(punto1);
+                       txtpunto2.setText(punto2);
+                       txtprecio.setText(String.valueOf(precio));
+                       txttramo.setText(tramo);
+
+                        }
+                    }
+                }
+        );
+    }
+
     private void limpiarCamposTexto(JTextField... camposTexto) {
         for (JTextField campo : camposTexto) {
             campo.setText("");
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -72,6 +102,7 @@ public class Ruta extends javax.swing.JInternalFrame {
         txttramo = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txtpunto2 = new javax.swing.JTextField();
+        btnactualizar = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -128,10 +159,22 @@ public class Ruta extends javax.swing.JInternalFrame {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setText("Punto 2:");
 
-        txtpunto2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        txtpunto2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtpunto2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtpunto2KeyReleased(evt);
+            }
+        });
+
+        btnactualizar.setBackground(new java.awt.Color(40, 150, 180));
+        btnactualizar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnactualizar.setForeground(new java.awt.Color(255, 255, 255));
+        btnactualizar.setText("Actualizar");
+        btnactualizar.setBorder(null);
+        btnactualizar.setEnabled(false);
+        btnactualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnactualizarActionPerformed(evt);
             }
         });
 
@@ -142,30 +185,33 @@ public class Ruta extends javax.swing.JInternalFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(txttramo))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(525, 525, 525)
+                        .addComponent(btnguardar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25)
+                        .addComponent(btnactualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 22, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2))
-                        .addGap(44, 44, 44)
+                        .addGap(50, 50, 50)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtprecio, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtpunto1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGap(381, 381, 381)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtprecio, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(307, 307, 307))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtpunto1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel4)
                                 .addGap(18, 18, 18)
-                                .addComponent(txtpunto2, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                                .addComponent(btnguardar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txttramo)))
-                        .addContainerGap())))
+                                .addComponent(txtpunto2, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -175,8 +221,7 @@ public class Ruta extends javax.swing.JInternalFrame {
                     .addComponent(jLabel1)
                     .addComponent(txtpunto1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(txtpunto2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnguardar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtpunto2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -185,23 +230,27 @@ public class Ruta extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txttramo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addGap(40, 40, 40)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnguardar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnactualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
     private void btnguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarActionPerformed
-       RutaDAO rutadao = new RutaDAOImpl();
-       RutaModel rut = new RutaModel();
+        RutaDAO rutadao = new RutaDAOImpl();
+        RutaModel rut = new RutaModel();
         try {
-            punto1=txtpunto1.getText();
-            punto2=txtpunto2.getText();
-            tramo= txttramo.getText();
+            punto1 = txtpunto1.getText();
+            punto2 = txtpunto2.getText();
+            tramo = txttramo.getText();
             precio = Double.parseDouble(txtprecio.getText());
-            
+
             /*CARGAR dao*/
             rut.setTramoRuta(tramo);
             rut.setPrecioRuta(precio);
@@ -209,26 +258,31 @@ public class Ruta extends javax.swing.JInternalFrame {
             rut.setPunto2Ruta(punto2);
             rutadao.agregarRuta(rut);
             cargarDatosRutas();
-            limpiarCamposTexto(txtpunto1,txtpunto2,txtprecio,txttramo);
+            limpiarCamposTexto(txtpunto1, txtpunto2, txtprecio, txttramo);
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
     }//GEN-LAST:event_btnguardarActionPerformed
-private void txtpuntoKeyReleased(java.awt.event.KeyEvent evt, JTextField textField) {
-    String punto1 = txtpunto1.getText();
-    String punto2 = txtpunto2.getText();
-    txttramo.setText(punto1 + " - " + punto2);
-}
+    private void txtpuntoKeyReleased(java.awt.event.KeyEvent evt, JTextField textField) {
+        String punto1 = txtpunto1.getText();
+        String punto2 = txtpunto2.getText();
+        txttramo.setText(punto1 + " - " + punto2);
+    }
     private void txtpunto1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtpunto1KeyReleased
         txtpuntoKeyReleased(evt, txtpunto1);
     }//GEN-LAST:event_txtpunto1KeyReleased
 
     private void txtpunto2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtpunto2KeyReleased
-      txtpuntoKeyReleased(evt, txtpunto2);
+        txtpuntoKeyReleased(evt, txtpunto2);
     }//GEN-LAST:event_txtpunto2KeyReleased
+
+    private void btnactualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnactualizarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnactualizarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnactualizar;
     private javax.swing.JButton btnguardar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

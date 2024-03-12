@@ -140,7 +140,8 @@ public class Login extends javax.swing.JInternalFrame {
             principal.menuconf.setEnabled(true);
             principal.menupasaje.setEnabled(true);
             principal.menusunat.setEnabled(true);
-            principal.menulogin.setEnabled(false);
+            //principal.menulogin.setEnabled(false);
+            principal.menuitemingresar.setEnabled(false);
             principal.menuencomienda.setEnabled(true);
             principal.menureporte.setEnabled(true);
 

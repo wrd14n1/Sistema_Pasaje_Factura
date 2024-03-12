@@ -1,16 +1,21 @@
-
 package sistemapasajes.View;
 
 import com.jtattoo.plaf.fast.FastLookAndFeel;
+import com.toedter.calendar.JDateChooser;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.beans.PropertyVetoException;
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import sistemapasajes.Funciones;
@@ -26,11 +31,10 @@ import sistemapasajes.modelo.ConfiguracionModel;
  */
 public final class Principal extends javax.swing.JFrame {
 
- 
     public Principal() {
         initComponents();
         // Configura el look and feel de JTattoo
-       
+
         try {
             // Puedes cambiar "Acryl" por el nombre de otro tema de JTattoo si lo prefieres
             UIManager.setLookAndFeel(new FastLookAndFeel());
@@ -38,14 +42,13 @@ public final class Principal extends javax.swing.JFrame {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
         //setIconImage(new ImageIcon(getClass().getResource("/recursos/icono.ico")).getImage());
-         Login vlog = new Login(this);
-        
+        Login vlog = new Login(this);
+
         // Inicia maximizado
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
-        Funciones.centrarInternalFrame(vlog);
-    }
 
+        //Funciones.centrarInternalFrame(vlog);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -63,7 +66,7 @@ public final class Principal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         menulogin = new javax.swing.JMenu();
         menuitemingresar = new javax.swing.JMenuItem();
-        menuitemingresar1 = new javax.swing.JMenuItem();
+        menuitemcerrar = new javax.swing.JMenuItem();
         menuconf = new javax.swing.JMenu();
         opconfig = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -75,12 +78,12 @@ public final class Principal extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         menuencomienda = new javax.swing.JMenu();
+        jMenuItem14 = new javax.swing.JMenuItem();
         menusunat = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
         menureporte = new javax.swing.JMenu();
         jMenuItem12 = new javax.swing.JMenuItem();
-        jMenuItem13 = new javax.swing.JMenuItem();
 
         jMenuItem4.setText("jMenuItem4");
 
@@ -129,17 +132,17 @@ public final class Principal extends javax.swing.JFrame {
         });
         menulogin.add(menuitemingresar);
 
-        menuitemingresar1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        menuitemingresar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/ingresar_menu.png"))); // NOI18N
-        menuitemingresar1.setText("Cerrar");
-        menuitemingresar1.setBorder(null);
-        menuitemingresar1.setPreferredSize(new java.awt.Dimension(82, 30));
-        menuitemingresar1.addActionListener(new java.awt.event.ActionListener() {
+        menuitemcerrar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        menuitemcerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/ingresar_menu.png"))); // NOI18N
+        menuitemcerrar.setText("Cerrar");
+        menuitemcerrar.setBorder(null);
+        menuitemcerrar.setPreferredSize(new java.awt.Dimension(82, 30));
+        menuitemcerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuitemingresar1ActionPerformed(evt);
+                menuitemcerrarActionPerformed(evt);
             }
         });
-        menulogin.add(menuitemingresar1);
+        menulogin.add(menuitemcerrar);
 
         jMenuBar1.add(menulogin);
 
@@ -247,6 +250,17 @@ public final class Principal extends javax.swing.JFrame {
         menuencomienda.setText("Encomiendas");
         menuencomienda.setEnabled(false);
         menuencomienda.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+
+        jMenuItem14.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jMenuItem14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/pasaje-aereo.png"))); // NOI18N
+        jMenuItem14.setText("Generar Encomienda");
+        jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem14ActionPerformed(evt);
+            }
+        });
+        menuencomienda.add(jMenuItem14);
+
         jMenuBar1.add(menuencomienda);
 
         menusunat.setBorder(null);
@@ -287,18 +301,13 @@ public final class Principal extends javax.swing.JFrame {
 
         jMenuItem12.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jMenuItem12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/navegador.png"))); // NOI18N
-        jMenuItem12.setText("Reporte de Pasajes");
+        jMenuItem12.setText("Reporte de Comprobante");
         jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem12ActionPerformed(evt);
             }
         });
         menureporte.add(jMenuItem12);
-
-        jMenuItem13.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jMenuItem13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/navegador.png"))); // NOI18N
-        jMenuItem13.setText("Reporte de Encomiendas");
-        menureporte.add(jMenuItem13);
 
         jMenuBar1.add(menureporte);
 
@@ -368,7 +377,7 @@ public final class Principal extends javax.swing.JFrame {
         } catch (PropertyVetoException ex) {
             Logger.getLogger(Principal.class
                     .getName()).log(Level.SEVERE, null, ex);
-        }        
+        }
 
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
@@ -385,39 +394,54 @@ public final class Principal extends javax.swing.JFrame {
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
 
-        // Código para realizar la copia de seguridad de la base de datos
-        ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
-        ConfiguracionModel configuracion = configdao.obtenerConfiguracionPorId(1);
-        String rutaBackup = configuracion.getRutaArchivo();
+    // Código para realizar la copia de seguridad de la base de datos
+    ConfiguracionDAO configdao = new ConfiguracionDAOImpl();
+    ConfiguracionModel configuracion = configdao.obtenerConfiguracionPorId(1);
+    String rutaBackup = configuracion.getRutaArchivo();
+    Date currentDate = Calendar.getInstance().getTime();
+    String fechaformato = Funciones.convertirFecha(currentDate);   
+    String dbName = "bd_pasaje";
+    String dbUser = "root";
+    String dbPass = ""; // Dejar en blanco si no hay contraseña
+    String filePath = rutaBackup + "\\backup_"+fechaformato+".sql";
 
-        String dbName = "bd_pasaje";
-        String dbUser = "root";
-        String dbPass = "020320";
-        String filePath = rutaBackup + "\\backup.sql";
-
-        try {
-            // Construir el comando para mysqldump
-            String[] command = {"mysqldump", "-u" + dbUser, "-p" + dbPass, dbName};
-
-            // Ejecutar el comando
-            ProcessBuilder processBuilder = new ProcessBuilder(command);
-            Process process = processBuilder.start();
-
-            // Obtener el flujo de salida del proceso
-            ProcessOutputReader outputReader = new ProcessOutputReader(process.getInputStream());
-            new Thread(outputReader).start();
-
-            // Esperar a que el proceso termine
-            int exitCode = process.waitFor();
-
-            // Verificar el código de salida
-            if (exitCode == 0) {
-                System.out.println("Copia de seguridad completada con éxito. Guardada en: " + filePath);
-            } else {
-                System.out.println("Error al realizar la copia de seguridad. Código de salida: " + exitCode);
-            }
-        } catch (IOException | InterruptedException e) {
+    try {
+        // Construir el comando para mysqldump
+        // No incluir la opción -p si no hay contraseña
+        String[] command;
+        if (dbPass.isEmpty()) {
+            command = new String[] {"C:\\xampp\\mysql\\bin\\mysqldump.exe", "-u" + dbUser, dbName};
+        } else {
+            command = new String[] {"C:\\xampp\\mysql\\bin\\mysqldump.exe", "-u" + dbUser, "-p" + dbPass, dbName};
         }
+
+        // Ejecutar el comando
+        ProcessBuilder processBuilder = new ProcessBuilder(command);
+        processBuilder.redirectOutput(new File(filePath)); // Redirigir la salida al archivo de copia de seguridad
+        Process process = processBuilder.start();
+
+        // Esperar a que el proceso termine
+        int exitCode = process.waitFor();
+
+        // Verificar el código de salida
+        if (exitCode == 0) {
+            // Verificar si el archivo de salida se ha creado correctamente
+            File backupFile = new File(filePath);
+            if (backupFile.exists()) {
+                System.out.println("Copia de seguridad completada con éxito. Guardada en: " + filePath);
+                JOptionPane.showMessageDialog(this, "Copia de seguridad completada con éxito. Guardada en: " + filePath, "Información", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                System.out.println("Error: No se pudo crear el archivo de copia de seguridad.");
+                JOptionPane.showMessageDialog(this, "Error: No se pudo crear el archivo de copia de seguridad.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            System.out.println("Error del sistema al realizar la copia de seguridad. Código de salida: " + exitCode);
+            JOptionPane.showMessageDialog(this, "Error del sistema al realizar la copia de seguridad. Código de salida: " + exitCode, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    } catch (IOException | InterruptedException e) {
+        System.out.println("Error general de la copia de seguridad. Código de salida: " + e);
+        JOptionPane.showMessageDialog(this, "Error general de la copia de seguridad. Código de salida: " + e, "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
@@ -426,13 +450,45 @@ public final class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
-        // TODO add your handling code here:
+                  String fecha_inicio, fecha_fin;
+    
+        try {
+                 
+            /*fecha inicial*/    
+            JDateChooser jd = new JDateChooser();
+            String message ="Ingrese fecha inicial:\n";
+            Object[] params = {message,jd};
+            JOptionPane.showConfirmDialog(null,params,"Fecha Inicial", JOptionPane.PLAIN_MESSAGE);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            fecha_inicio=sdf.format(((JDateChooser)params[1]).getDate());
+            
+            /*fecha final*/
+            JDateChooser jd1 = new JDateChooser();
+            String mensaje ="Ingrese fecha final:\n";
+            Object[] params1 = {mensaje,jd1};
+            JOptionPane.showConfirmDialog(null,params1,"Fecha Final", JOptionPane.PLAIN_MESSAGE);
+
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+            fecha_fin=sdf1.format(((JDateChooser)params1[1]).getDate());
+            Reporte.inicio=fecha_inicio;
+            Reporte.fin=fecha_fin;
+            Reporte vhb = new Reporte();
+            Funciones.centrarInternalFrame(vhb);
+            
+        } catch (Exception e) {
+            //Metodos.MensajeError("Error con las fechas: \n"+e);
+        }
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
-    private void menuitemingresar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuitemingresar1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuitemingresar1ActionPerformed
+    private void menuitemcerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuitemcerrarActionPerformed
+       this.dispose();
+    }//GEN-LAST:event_menuitemcerrarActionPerformed
 
+    private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
+          Encomienda venco = new Encomienda();
+          Funciones.centrarInternalFrame(venco);
+    }//GEN-LAST:event_jMenuItem14ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -492,7 +548,7 @@ public final class Principal extends javax.swing.JFrame {
     private static javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem12;
-    private javax.swing.JMenuItem jMenuItem13;
+    private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
@@ -503,8 +559,8 @@ public final class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem9;
     public javax.swing.JMenu menuconf;
     public javax.swing.JMenu menuencomienda;
-    private javax.swing.JMenuItem menuitemingresar;
-    private javax.swing.JMenuItem menuitemingresar1;
+    public javax.swing.JMenuItem menuitemcerrar;
+    public javax.swing.JMenuItem menuitemingresar;
     public javax.swing.JMenu menulogin;
     public javax.swing.JMenu menupasaje;
     public javax.swing.JMenu menureporte;

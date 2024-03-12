@@ -22,4 +22,5 @@ public interface ComprobanteDAO {
     void actualizarPorEstadoComprobante  (ComprobanteModel comprobante);
     void eliminarComprobante (int idComp);    
     void actualizarComprobanteHash(ComprobanteModel comprobante);
+    List<ComprobanteModel> reporteComprobante (String fechaIni, String fechafin);
 }
